@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lollipop_liner_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/sweat_intake_lollipop_shape"
+    android:orientation="horizontal"
+    android:paddingHorizontal="4.dp"
+    android:paddingVertical="1.dp">
+
+    <TextView
+        android:id="@+id/time_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:background="@color/intakeChartLollipopColor"
+        android:textSize="12.dp"
+        android:fontFamily="@font/oswald_variablefont_wght"
+        android:textFontWeight="700"
+        android:paddingHorizontal="2.dp" />
+
+    <Space
+        android:layout_width="5dp"
+        android:layout_height="20dp"/>
+
+    <TextView
+        android:id="@+id/loss_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/intakeChartLollipopColor"
+        android:textSize="12.dp"
+        android:fontFamily="@font/oswald_variablefont_wght"
+        android:textFontWeight="700"
+        android:text="" />
+
+    <Space
+        android:layout_width="5dp"
+        android:layout_height="20dp"/>
+
+    <TextView
+        android:id="@+id/loss_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/intakeChartLollipopColor"
+        android:textSize="12.dp"
+        android:fontFamily="@font/oswald_variablefont_wght"
+        android:textFontWeight="400"
+        android:text="SWEAT LOSS" />
+
+    <Space
+        android:layout_width="5dp"
+        android:layout_height="20dp" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <uses-sdk android:minSdkVersion="21" />
+
+    <!--
+    // From Nordic semi libs manifest
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+
+    <uses-permission
+        android:name="android.permission.ACCESS_COARSE_LOCATION"
+        tools:node="replace" />
+    <uses-permission
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        tools:node="replace" />
+
+    <uses-permission-sdk-23
+        android:name="android.permission.ACCESS_COARSE_LOCATION"
+        tools:node="remove" />
+    <uses-permission-sdk-23
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        tools:node="remove" />
+
+    <!--
+     Bluetooth permission is required on Android 4.3 - 11 in order to communicate with
+     Bluetooth LE devices.
+    -->
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <!--
+     Bluetooth Admin permission is required on Android 4.3 - 11 in order to scan for
+     Bluetooth LE devices.
+    -->
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30" />
+    <!--
+     On Android 12 new set of Bluetooth permissions were added. BLUETOOTH_SCAN permission is
+     needed to scan for Bluetooth LE devices. The "never for location" flag is set, as we are not
+     interested in finding the user location, and we are OK with the fact, that beacons info
+     will be removed from the scan results.
+    -->
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation"
+        tools:targetApi="s" />
+    <!--
+     This permission is required in order to connect to a Bluetooth LE device on Android 12
+     onwards.
+    -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="true" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <queries>
+        <package android:name="no.nordicsemi.android.dfu" />
+
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
+
+    <application
+        android:name=".appInjectionSupport.EpicoreCHApplication"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:launchMode="singleTask"
+        android:icon="@drawable/app_icon"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/app_icon"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.EpicoreCH"
+        tools:targetApi="31"
+        android:enableOnBackInvokedCallback="true">
+
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:clearTaskOnLaunch="true"
+            android:label="@string/app_name"
+            android:theme="@style/SplashScreenTheme"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="rehydrate"/>
+                <data android:host="ch.epicorebiosystems.com"/>
+                <data android:pathPrefix="/code"/>
+                <!--                <data android:scheme="rehydrate"/>
+                                <data android:host="epicore.dev"/>
+                                <data android:pathPrefix="/code"/> -->
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="com.epicorebiosystems.rehydrate.nordicsemi.uart.repository.UARTService"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice" />
+
+    </application>
+</manifest>
