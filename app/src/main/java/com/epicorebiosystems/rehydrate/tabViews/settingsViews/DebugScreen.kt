@@ -102,6 +102,7 @@ fun DebugScreen(chViewModel: ModelData, ebsDeviceMonitor: EBSDeviceMonitor, navC
                                         chViewModel.networkManager.logOutUser()
                                         chViewModel.onboardingStep = 1
                                         chViewModel.updateOnBoardingComplete(false)
+                                        chViewModel.updateDemoDemoMode(false)
                                         ebsDeviceMonitor.onEvent(DisconnectEvent)
                                         ebsDeviceMonitor.disconnect()
                                         ebsDeviceMonitor.stopScanningJob()

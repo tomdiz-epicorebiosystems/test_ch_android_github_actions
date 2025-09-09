@@ -151,6 +151,9 @@ class ModelData : ViewModel() {
 
     var isCreateAccountFlow = mutableStateOf( false)
 
+    // DEMO-DEMO mode
+    var isDemoOnboardingFlow = mutableStateOf( false)
+
     // Loaded from PreferencesDataStore
     var serverSettings = mutableStateOf(0)      // 1 is staging, 0 is production
 
@@ -195,12 +198,12 @@ class ModelData : ViewModel() {
     // Passive water loss state
     var userPassiveLossState = mutableStateOf(true)
 
-    var oldUserHeightFt = ""
-    var oldUserHeightIn = ""
-    var oldUserHeightCm = ""
-    var oldUserWeightLb = ""
-    var oldUserWeightKg = ""
-    var oldUserGender = ""
+    var oldUserHeightFt = "5"
+    var oldUserHeightIn = "9"
+    var oldUserHeightCm = "175"
+    var oldUserWeightLb = "165"
+    var oldUserWeightKg = "75"
+    var oldUserGender = "Male"
 
     var userHistoryStats: UserHistoryStats? = null
     var userAvgSweatSodiumConcentration: AvgSweatVolumeSodiumConcentration? = null
@@ -281,6 +284,7 @@ class ModelData : ViewModel() {
     var capSodiumValue = mutableStateOf(0)
 
     var scrollSettingsView = false
+    var scrollEnableShareSettingsView = false
 
     init {
         Log.d("ModelData", "init() called")
@@ -521,6 +525,25 @@ class ModelData : ViewModel() {
         return onboardingComplete.value
     }
 
+    fun getDemoDemoMode(): Boolean {
+        isDemoOnboardingFlow.value = fileManager.fileExists("demodemo.out")
+        return isDemoOnboardingFlow.value
+    }
+
+    fun updateDemoDemoMode(done: Boolean) {
+        viewModelScope.launch {
+            dataStore.saveDemoOnboardingMode(done)
+        }
+
+        if (done) {
+            fileManager.writeFile("demodemo.out", "done")
+        }
+        else {
+            fileManager.deleteFile("demodemo.out")
+        }
+        isDemoOnboardingFlow.value = done
+    }
+
     fun updateIsCreateAccountFlow(done: Boolean) {
         if (done) {
             val outputString = "${usersEmailAddress.value}*${enterpriseId.value}"
@@ -715,7 +738,7 @@ class ModelData : ViewModel() {
             dataStore.saveUserWeightLb("165")
             dataStore.saveUserWeightKg("75")
             dataStore.saveUserHeightFt("5")
-            dataStore.saveUserHeightIn("7")
+            dataStore.saveUserHeightIn("9")
             dataStore.saveUserHeightCm("175")
             dataStore.saveUserGender("Male")
         }
@@ -733,6 +756,11 @@ class ModelData : ViewModel() {
         onboardingEnterpriseId.value = ""
         onboardingEnterpriseName.value = ""
         onboardingSiteName.value = ""
+        usersEmailAddress.value = ""
+
+        viewModelScope.launch {
+            dataStore.saveUserEmailAddress("")
+        }
     }
 
     fun writeJSONtoFile(fileName: String, bottles: List<BottleData>) {

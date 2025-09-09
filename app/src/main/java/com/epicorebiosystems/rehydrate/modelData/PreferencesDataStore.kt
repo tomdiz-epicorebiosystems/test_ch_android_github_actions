@@ -48,8 +48,19 @@ class PreferencesDataStore(private val context: Context) {
         val CURRENT_AUTH_API_SERVER = intPreferencesKey("current_auth_api_server")
         val CURRENT_AUTH_USER_EMAIL = stringPreferencesKey("current_auth_user_email")
         val CURRENT_AUTH_USER_ROLE = stringPreferencesKey("current_auth_user_role")
+        val DEMO_ONBOARDING_MODE = booleanPreferencesKey("is_demo_onboarding_flow")
     }
-    
+
+    val getDemoOnboardingMode: Flow<Boolean> = context.dataStore.data.map { preferences ->
+        preferences[DEMO_ONBOARDING_MODE] ?: false
+    }
+
+    suspend fun saveDemoOnboardingMode(isDemoMode: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[DEMO_ONBOARDING_MODE] = isDemoMode
+        }
+    }
+
     val getCurrentAuthUserRole: Flow<String> = context.dataStore.data.map { preferences ->
         preferences[CURRENT_AUTH_USER_ROLE] ?: ""
     }

@@ -3,6 +3,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="waterFull">#2A9AD6</color>
+    <color name="switch_off_thumb">#757780</color>
+    <color name="switch_off_boarder">#757780</color>
+    <color name="switch_off_track">#e2e2e9</color>
+    <color name="switch_off_onboard_thumb">#889298</color>
+    <color name="switch_off_onboard_boarder">#889298</color>
+    <color name="switch_off_onboard_track">#2f3538</color>
     <color name="intake_button_color">#3D688B</color>
     <color name="TabLabelOff">#707071</color>
     <color name="BgStatusHydrated">#11314c</color>

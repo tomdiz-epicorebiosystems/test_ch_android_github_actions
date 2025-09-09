@@ -104,6 +104,8 @@ fun TopAppBarConnectivityDropdownMenu(chViewModel: ModelData, ebsDeviceMonitor: 
 
                         // Clear all the flags for downloading and uploading upon disconnection.
                         chViewModel.sweatDataCurrentDayDownloadingCompleted = true
+                        ebsDeviceMonitor.setCurrentDayDownloadingCompletedFlagForHistoricalData(true)
+
                         chViewModel.sweatDataMultiDaySyncWithSensorCompleted = true
                         chViewModel.historicalSweatDataDownloadCompleted = true
                         chViewModel.setCsvFileIsUploading(false)
@@ -128,6 +130,8 @@ fun TopAppBarConnectivityDropdownMenu(chViewModel: ModelData, ebsDeviceMonitor: 
 
                         // Clear all the flags for downloading and uploading upon disconnection.
                         chViewModel.sweatDataCurrentDayDownloadingCompleted = true
+                        ebsDeviceMonitor.setCurrentDayDownloadingCompletedFlagForHistoricalData(true)
+
                         chViewModel.sweatDataMultiDaySyncWithSensorCompleted = true
                         chViewModel.historicalSweatDataDownloadCompleted = true
                         chViewModel.setCsvFileIsUploading(false)

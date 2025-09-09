@@ -347,12 +347,12 @@ fun EpicoreCHApp(chViewModel: ModelData) {
         }
 
         // Load saved userInfo
-        chViewModel.userWeightLb = chViewModel.dataStore.getUserWeightLb.collectAsState(initial = "") as MutableState<String>
-        chViewModel.userWeightKg = chViewModel.dataStore.getUserWeightKg.collectAsState(initial = "") as MutableState<String>
-        chViewModel.userHeightFt = chViewModel.dataStore.getUserHeightFt.collectAsState(initial = "") as MutableState<String>
-        chViewModel.userHeightIn = chViewModel.dataStore.getUserHeightIn.collectAsState(initial = "") as MutableState<String>
-        chViewModel.userHeightCm = chViewModel.dataStore.getUserHeightCm.collectAsState(initial = "") as MutableState<String>
-        chViewModel.userGender = chViewModel.dataStore.getUserGender.collectAsState(initial = "") as MutableState<String>
+        chViewModel.userWeightLb = chViewModel.dataStore.getUserWeightLb.collectAsState(initial = "165") as MutableState<String>
+        chViewModel.userWeightKg = chViewModel.dataStore.getUserWeightKg.collectAsState(initial = "75") as MutableState<String>
+        chViewModel.userHeightFt = chViewModel.dataStore.getUserHeightFt.collectAsState(initial = "5") as MutableState<String>
+        chViewModel.userHeightIn = chViewModel.dataStore.getUserHeightIn.collectAsState(initial = "9") as MutableState<String>
+        chViewModel.userHeightCm = chViewModel.dataStore.getUserHeightCm.collectAsState(initial = "175") as MutableState<String>
+        chViewModel.userGender = chViewModel.dataStore.getUserGender.collectAsState(initial = "Male") as MutableState<String>
         chViewModel.enterpriseId = chViewModel.dataStore.getEnterpriseId.collectAsState(initial = "") as MutableState<String>
         chViewModel.jwtEnterpriseID = chViewModel.dataStore.getJwtEnterpriseId.collectAsState(initial = "") as MutableState<String>
         chViewModel.CH_EnterpriseName = chViewModel.dataStore.getEnterpriseName.collectAsState(initial = "") as MutableState<String>
@@ -374,6 +374,12 @@ fun EpicoreCHApp(chViewModel: ModelData) {
         chViewModel.currentAuthUserId = chViewModel.dataStore.getUserId.collectAsState(initial = "") as MutableState<String>
         chViewModel.currentAuthUserEmail = chViewModel.dataStore.getCurrentAuthUserEmail.collectAsState(initial = "") as MutableState<String>
         chViewModel.currentAuthUserRole = chViewModel.dataStore.getCurrentAuthUserRole.collectAsState(initial = "") as MutableState<String>
+
+        // DEMO-DEMO mode
+        chViewModel.isDemoOnboardingFlow.value = chViewModel.getDemoDemoMode()
+        if (chViewModel.isDemoOnboardingFlow.value) {
+            chViewModel.switchShareAnonymousDataEpicore = false
+        }
 
         // Load notifications state
         chViewModel.notificationStateString = chViewModel.dataStore.getNotificationState.collectAsState(initial = "") as MutableState<String>
@@ -413,6 +419,15 @@ fun EpicoreCHApp(chViewModel: ModelData) {
         } else {
             BottomBarWithIntakeFab(chViewModel, ebsMonitor)
         }
+
+        // DEMO-DEMO mode
+        chViewModel.isDemoOnboardingFlow.value = chViewModel.getDemoDemoMode()
+        if (chViewModel.isDemoOnboardingFlow.value) {
+            chViewModel.switchShareAnonymousDataEpicore = false
+        }
+
+        ebsMonitor.setDemoOnboardingFlow(chViewModel.isDemoOnboardingFlow.value)
+
     }
 }
 
@@ -486,6 +501,7 @@ fun BottomBarWithIntakeFab(chViewModel: ModelData, ebsMonitor: EBSDeviceMonitor)
 
                         if (!chViewModel.sweatDataCurrentDayDownloadingCompleted) {
                             chViewModel.sweatDataCurrentDayDownloadingCompleted = true
+                            ebsMonitor.setCurrentDayDownloadingCompletedFlagForHistoricalData(true)
                         }
 
                         if (!chViewModel.sweatDataMultiDaySyncWithSensorCompleted) {
@@ -597,14 +613,33 @@ fun BottomBarWithIntakeFab(chViewModel: ModelData, ebsMonitor: EBSDeviceMonitor)
 
                 ebsMonitor.setFileReadyUploadFlag(false)
                 chViewModel.sweatDataCurrentDayDownloadingCompleted = true
+                ebsMonitor.setCurrentDayDownloadingCompletedFlagForHistoricalData(true)
+
+                if (chViewModel.isDemoOnboardingFlow.value) {
+                    GlobalRumMonitor.get().addError("DEMO-DEMO", RumErrorSource.LOGGER, null, mapOf("CSV" to ebsMonitor.getDemoSweatDataLogCSVText()))
+
+                    chViewModel.isCurrentUserSession = true
+                    chViewModel.isUserSessionToDisplay = true
+
+                    chViewModel.sweatDataMultiDaySyncWithSensorCompleted = true
+                }
 
                 // Only upload the file to cloud if the session's user ID and site ID match with the current user information.
-                if((chViewModel.currentAuthUserId.value.substring(0, 8) == ebsMonitor.getSessionUserID()) && (chViewModel.enterpriseId.value == ebsMonitor.getSessionSiteID())) {
-                    //Log.d("fileReadyUpload", "uploadSensorCSVFile - ${ebsMonitor.getSweatDataLogFileName()}")
-                    chViewModel.networkManager.uploadSensorCSVFile(
-                        context,
-                        ebsMonitor.getSweatDataLogFileName()
-                    )
+                else if((chViewModel.currentAuthUserId.value.substring(0, 8) == ebsMonitor.getSessionUserID()) && (chViewModel.enterpriseId.value == ebsMonitor.getSessionSiteID())) {
+
+//                    if (chViewModel.isDemoOnboardingFlow.value) {
+//                        GlobalRumMonitor.get().addError("DEMO-DEMO", RumErrorSource.LOGGER, null, mapOf("CSV" to ebsMonitor.getDemoSweatDataLogCSVText()))
+//                    }
+//                    else {
+                        if (!chViewModel.switchShareAnonymousDataEnterprise) {
+                            return@launch
+                        }
+                        //Log.d("fileReadyUpload", "uploadSensorCSVFile - ${ebsMonitor.getSweatDataLogFileName()}")
+                        chViewModel.networkManager.uploadSensorCSVFile(
+                            context,
+                            ebsMonitor.getSweatDataLogFileName()
+                        )
+//                    }
 
                     chViewModel.isCurrentUserSession = true
                     chViewModel.isUserSessionToDisplay = true
@@ -636,13 +671,26 @@ fun BottomBarWithIntakeFab(chViewModel: ModelData, ebsMonitor: EBSDeviceMonitor)
 
                 ebsMonitor.setFileReadyUploadFlag(false)
 
+                // Don't store previous day's data in DEMO mode, only current day's data.
+                if (chViewModel.isDemoOnboardingFlow.value) {
+//                    GlobalRumMonitor.get().addError("DEMO-DEMO", RumErrorSource.LOGGER, null, mapOf("CSV" to ebsMonitor.getDemoSweatDataLogCSVText()))
+                }
+
                 // Only upload the file to cloud if the session's user ID and site ID match with the current user information.
-                if((chViewModel.currentAuthUserId.value.substring(0, 8) == ebsMonitor.getSessionUserID()) && (chViewModel.enterpriseId.value == ebsMonitor.getSessionSiteID())) {
-                    //Log.d("fileReadyUpload", "uploadSensorCSVFile - ${ebsMonitor.getSweatDataLogFileName()}")
-                    chViewModel.networkManager.uploadSensorCSVFile(
-                        context,
-                        ebsMonitor.getSweatDataLogFileName()
-                    )
+                else if((chViewModel.currentAuthUserId.value.substring(0, 8) == ebsMonitor.getSessionUserID()) && (chViewModel.enterpriseId.value == ebsMonitor.getSessionSiteID())) {
+//                    if (chViewModel.isDemoOnboardingFlow.value) {
+//                        GlobalRumMonitor.get().addError("DEMO-DEMO", RumErrorSource.LOGGER, null, mapOf("CSV" to ebsMonitor.getDemoSweatDataLogCSVText()))
+//                    }
+//                    else {
+                        if (!chViewModel.switchShareAnonymousDataEnterprise) {
+                            return@launch
+                        }
+                        //Log.d("fileReadyUpload", "uploadSensorCSVFile - ${ebsMonitor.getSweatDataLogFileName()}")
+                        chViewModel.networkManager.uploadSensorCSVFile(
+                            context,
+                            ebsMonitor.getSweatDataLogFileName()
+                        )
+//                    }
                 }
 
                 // No match, remove the file downloaded from sensor.
@@ -861,7 +909,7 @@ fun BottomBarWithIntakeFab(chViewModel: ModelData, ebsMonitor: EBSDeviceMonitor)
                         if (!chViewModel.isTestAccount()) {
                             // if JWT Token invalid force logout
                             val isValidToken = chViewModel.networkManager.isTokenValid()
-                            if (!isValidToken) {
+                            if (!isValidToken && !chViewModel.isDemoOnboardingFlow.value) {
                                 chViewModel.networkManager.logOutUser()
                                 chViewModel.onboardingStep = 1
                                 chViewModel.updateOnBoardingComplete(false)
@@ -939,9 +987,27 @@ fun BottomBarWithIntakeFab(chViewModel: ModelData, ebsMonitor: EBSDeviceMonitor)
 
                     chViewModel.isTabButtonPressed.value = true
 
-                    HistoryScreen(chViewModel, ebsMonitor, navController, updateHideBottomBar = { viewState ->
+                    HistoryScreen(chViewModel, ebsMonitor, navController,
+                        updateHideBottomBar = { viewState ->
                         hideBottomBar = viewState
-                    })
+                        },
+                        items = tabItems,
+                        onItemClick = { item ->
+                            navController.navigate(item.route!!) {
+                                // Pop up to the start destination of the graph to
+                                // avoid building up a large stack of destinations
+                                // on the back stack as users select tabItems
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                // Avoid multiple copies of the same destination when
+                                // re-selecting the same item
+                                launchSingleTop = true
+                                // Restore state when re-selecting a previously selected item
+                                restoreState = true
+                            }
+                        }
+                    )
                 }
 
                 // Intake
@@ -982,9 +1048,27 @@ fun BottomBarWithIntakeFab(chViewModel: ModelData, ebsMonitor: EBSDeviceMonitor)
 
                     chViewModel.isTabButtonPressed.value = true
 
-                    InsightsScreen(chViewModel, ebsMonitor, navController, updateHideBottomBar = { viewState ->
+                    InsightsScreen(chViewModel, ebsMonitor, navController,
+                        updateHideBottomBar = { viewState ->
                         hideBottomBar = viewState
-                    })
+                        },
+                        items = tabItems,
+                        onItemClick = { item ->
+                            navController.navigate(item.route!!) {
+                                // Pop up to the start destination of the graph to
+                                // avoid building up a large stack of destinations
+                                // on the back stack as users select tabItems
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                // Avoid multiple copies of the same destination when
+                                // re-selecting the same item
+                                launchSingleTop = true
+                                // Restore state when re-selecting a previously selected item
+                                restoreState = true
+                            }
+                        }
+                    )
                 }
 
                 // Settings

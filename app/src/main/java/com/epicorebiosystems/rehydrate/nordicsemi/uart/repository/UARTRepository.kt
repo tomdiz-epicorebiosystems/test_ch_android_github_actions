@@ -158,6 +158,8 @@ class UARTRepository @Inject internal constructor(
     private var sweatDataLogSessionUserID: String = ""
     private var sweatDataLogSessionSiteID: String = ""
 
+    private var demoSweatDataLogCSVText: String = ""
+
     // Used for module already in session support
     private var isCurrentUserSession = true
     private var isUserSessionToDisplay = false
@@ -167,6 +169,10 @@ class UARTRepository @Inject internal constructor(
     // Stores SHA-1 hashes as keys to track duplicates
     private val uploadDataDuplicateHashMap: MutableMap<String, Boolean> = mutableMapOf()
     private var sweatDataAdded = false
+
+    private var isDemoOnboardingFlow = false
+
+    private var currentDayDownloadingCompletedFlagForHistoricalData = true
 
     fun setOnScreen(isOnScreen: Boolean) {
         this.isOnScreen = isOnScreen
@@ -263,7 +269,7 @@ class UARTRepository @Inject internal constructor(
                         val downloadedRecordCount = historicalSweatDataSetForPlot.size
                         if (downloadedRecordCount > 0) {
                             val downloadIndex = (historicalSweatDataSetForPlot[downloadedRecordCount-1].timeStamp / 20u + 1u).toUShort()
-                            currentHistoricalSweatDataDownloadIndex = downloadIndex
+//                            currentHistoricalSweatDataDownloadIndex = downloadIndex
                             //Log.d("currHistoricalDwnIndex2", "$downloadIndex")
                         }
 
@@ -525,56 +531,75 @@ class UARTRepository @Inject internal constructor(
 
                         }
                         else {
-                        // This is regular periodic sweat data
-                        if (dataType == SweatLogDataType.DATA_SWEAT.eventType)
-                        {
-                            sweatDataString = "${timeStamp},${dataType},${localSweatVolumeUl},${localSweatChlorideLevel},${sweatVolumeDeficitInMl},${sweatSodiumDeficitInMg},${sweatVolumeTotalLossInMl},${sweatSodiumTotalLossInMg},${currentTEWLToLog},${bodyTemperatureSkinInC},${bodyTemperatureAirInC},${activityCounts},${batteryVoltageInMv}\n"
-                        }
-
-                        // This is intake event recorded from the app.
-                        else if (dataType == SweatLogDataType.EVENT_HYDRATION_INTAKE.eventType)
-                        {
-                            sweatDataString = "${timeStamp},${dataType},${eventWaterIntakeInMl},${eventSodiumIntakeInMg},${sweatVolumeDeficitInMl},${sweatSodiumDeficitInMg},${sweatVolumeTotalLossInMl},${sweatSodiumTotalLossInMg},${currentTEWLToLog},${bodyTemperatureSkinInC},${bodyTemperatureAirInC},${activityCounts},${batteryVoltageInMv}\n"
-                        }
-
-                        // This is GPS location event recorded from the app.
-                        else if (dataType == SweatLogDataType.EVENT_GPS_LOCATION.eventType) {
-                        }
-
-                        // This is one of the events: nudge alert, dehydration alarm.
-                        else if ((dataType == SweatLogDataType.EVENT_DEHYDRATION_ALARM.eventType) || (dataType == SweatLogDataType.EVENT_NUDGE_ALERT.eventType)) {
-                            sweatDataString =
-                                "${timeStamp},${dataType},${localSweatVolumeUl},${localSweatChlorideLevel},${sweatVolumeDeficitInMl},${sweatSodiumDeficitInMg},${sweatVolumeTotalLossInMl},${sweatSodiumTotalLossInMg},${currentTEWLToLog},${bodyTemperatureSkinInC},${bodyTemperatureAirInC},${activityCounts},${batteryVoltageInMv}\n"
-
-                        }
-
-                        else if (dataType == SweatLogDataType.EVENT_FLUIDICS_NOT_CLIPPED.eventType) {
-                            sweatDataString =
-                                "${timeStamp},${dataType},${localSweatVolumeUl},${eventFluidicsNotClippedStatus},${sweatVolumeDeficitInMl},${sweatSodiumDeficitInMg},${sweatVolumeTotalLossInMl},${sweatSodiumTotalLossInMg},${currentTEWLToLog},${bodyTemperatureSkinInC},${bodyTemperatureAirInC},${activityCounts},${batteryVoltageInMv}\n"
-                        }
-
-                        // This is one of the events: seal break, plateau, saturation, persistent dropout or sweat rate update.
-                        else if (dataType != 0xFF) {
-                            sweatDataString =
-                                "${timeStamp},${dataType},${localSweatVolumeUl},${eventLocalSweatRate},${eventDurationForSweatRate},${eventLocalVolumeLossForSweatRateCalculation},${sweatVolumeTotalLossInMl},${sweatSodiumTotalLossInMg},${currentTEWLToLog},${bodyTemperatureSkinInC},${bodyTemperatureAirInC},${activityCounts},${batteryVoltageInMv}\n"
-                        }
-
-                        // Use current day sweat data to fill the chart data faster
-                        if (!uartServiceData.fileReadyUpload && isCurrentUserSession && currentHistoricalSweatDataDownloadIndex <= 0u) {
-                            val sweatVolumeTotalLossInOz = round(sweatVolumeTotalLossInMl.toDouble() * 0.033814 * 10) / 10
-                            val sweatVolumeDeficitInOz = round(sweatVolumeDeficitInMl * 0.033814 * 10) / 10
-                            val fluidTotalIntakeInOz = (eventWaterIntakeInMl.toDouble() * 0.033814).toBigDecimal().setScale(1, RoundingMode.DOWN).toDouble()
-                            val sodiumTotalIntakeInMg = (sweatSodiumTotalLossInMg.toShort() - sweatSodiumDeficitInMg).toUShort()
-
-                            initialSweatDataSetForPlot.add(HistoricalSweatDataPacket(timeStamp, sweatVolumeDeficitInOz, sweatSodiumDeficitInMg,
-                                sweatVolumeTotalLossInOz, sweatSodiumTotalLossInMg, fluidTotalIntakeInOz, sodiumTotalIntakeInMg,
-                                bodyTemperatureSkinInC, bodyTemperatureAirInC, activityCounts))
-                        }
+                            // This is regular periodic sweat data
+                            if (dataType == SweatLogDataType.DATA_SWEAT.eventType) {
+                                sweatDataString =
+                                    "${timeStamp},${dataType},${localSweatVolumeUl},${localSweatChlorideLevel},${sweatVolumeDeficitInMl},${sweatSodiumDeficitInMg},${sweatVolumeTotalLossInMl},${sweatSodiumTotalLossInMg},${currentTEWLToLog},${bodyTemperatureSkinInC},${bodyTemperatureAirInC},${activityCounts},${batteryVoltageInMv}\n"
                             }
+
+                            // This is intake event recorded from the app.
+                            else if (dataType == SweatLogDataType.EVENT_HYDRATION_INTAKE.eventType) {
+                                sweatDataString =
+                                    "${timeStamp},${dataType},${eventWaterIntakeInMl},${eventSodiumIntakeInMg},${sweatVolumeDeficitInMl},${sweatSodiumDeficitInMg},${sweatVolumeTotalLossInMl},${sweatSodiumTotalLossInMg},${currentTEWLToLog},${bodyTemperatureSkinInC},${bodyTemperatureAirInC},${activityCounts},${batteryVoltageInMv}\n"
+                            }
+
+                            // This is GPS location event recorded from the app.
+                            else if (dataType == SweatLogDataType.EVENT_GPS_LOCATION.eventType) {
+                            }
+
+                            // This is one of the events: nudge alert, dehydration alarm.
+                            else if ((dataType == SweatLogDataType.EVENT_DEHYDRATION_ALARM.eventType) || (dataType == SweatLogDataType.EVENT_NUDGE_ALERT.eventType)) {
+                                sweatDataString =
+                                    "${timeStamp},${dataType},${localSweatVolumeUl},${localSweatChlorideLevel},${sweatVolumeDeficitInMl},${sweatSodiumDeficitInMg},${sweatVolumeTotalLossInMl},${sweatSodiumTotalLossInMg},${currentTEWLToLog},${bodyTemperatureSkinInC},${bodyTemperatureAirInC},${activityCounts},${batteryVoltageInMv}\n"
+
+                            } else if (dataType == SweatLogDataType.EVENT_FLUIDICS_NOT_CLIPPED.eventType) {
+                                sweatDataString =
+                                    "${timeStamp},${dataType},${localSweatVolumeUl},${eventFluidicsNotClippedStatus},${sweatVolumeDeficitInMl},${sweatSodiumDeficitInMg},${sweatVolumeTotalLossInMl},${sweatSodiumTotalLossInMg},${currentTEWLToLog},${bodyTemperatureSkinInC},${bodyTemperatureAirInC},${activityCounts},${batteryVoltageInMv}\n"
+                            }
+
+                            // This is one of the events: seal break, plateau, saturation, persistent dropout or sweat rate update.
+                            else if (dataType != 0xFF) {
+                                sweatDataString =
+                                    "${timeStamp},${dataType},${localSweatVolumeUl},${eventLocalSweatRate},${eventDurationForSweatRate},${eventLocalVolumeLossForSweatRateCalculation},${sweatVolumeTotalLossInMl},${sweatSodiumTotalLossInMg},${currentTEWLToLog},${bodyTemperatureSkinInC},${bodyTemperatureAirInC},${activityCounts},${batteryVoltageInMv}\n"
+                            }
+
+                        }
+
+//                        // Use current day sweat data to fill the chart data faster
+//                        if (!uartServiceData.fileReadyUpload && isCurrentUserSession && currentHistoricalSweatDataDownloadIndex <= 0u) {
+//                            val sweatVolumeTotalLossToDisplayInMl = sweatVolumeTotalLossInMl.toDouble() + (if (passiveWaterLoss) currentTEWLToLog.toDouble() else 0.0)
+//                            val sweatVolumeTotalLossInOz = round(sweatVolumeTotalLossToDisplayInMl * 0.033814 * 10) / 10
+//                            val sweatVolumeDeficitToDisplayInMl = sweatVolumeDeficitInMl.toDouble() + (if (passiveWaterLoss) currentTEWLToLog.toDouble() else 0.0)
+//                            val sweatVolumeDeficitInOz = round(sweatVolumeDeficitToDisplayInMl * 0.033814 * 10) / 10
+//                            val fluidTotalIntakeInOz = (eventWaterIntakeInMl.toDouble() * 0.033814).toBigDecimal().setScale(1, RoundingMode.DOWN).toDouble()
+//                            val sodiumTotalIntakeInMg = (sweatSodiumTotalLossInMg.toShort() - sweatSodiumDeficitInMg).toUShort()
+//
+//                            println(sweatVolumeTotalLossToDisplayInMl)
+//                            println(timeStamp)
+//
+//                            initialSweatDataSetForPlot.add(HistoricalSweatDataPacket(timeStamp, sweatVolumeDeficitInOz, sweatSodiumDeficitInMg,
+//                                sweatVolumeTotalLossInOz, sweatSodiumTotalLossInMg, fluidTotalIntakeInOz, sodiumTotalIntakeInMg,
+//                                bodyTemperatureSkinInC, bodyTemperatureAirInC, activityCounts))
+//                        }
 
                         if (checkForDuplicate(sweatDataString)) {
                             sweatDataLogCSVText += sweatDataString
                             sweatDataAdded = true
+
+                            // Use current day sweat data to fill the chart data faster
+                            if (!uartServiceData.fileReadyUpload && isCurrentUserSession && currentHistoricalSweatDataDownloadIndex <= 0u && !currentDayDownloadingCompletedFlagForHistoricalData) {
+                                val sweatVolumeTotalLossToDisplayInMl = sweatVolumeTotalLossInMl.toDouble() + (if (passiveWaterLoss) currentTEWLToLog.toDouble() else 0.0)
+                                val sweatVolumeTotalLossInOz = round(sweatVolumeTotalLossToDisplayInMl * 0.033814 * 10) / 10
+                                val sweatVolumeDeficitToDisplayInMl = sweatVolumeDeficitInMl.toDouble() + (if (passiveWaterLoss) currentTEWLToLog.toDouble() else 0.0)
+                                val sweatVolumeDeficitInOz = round(sweatVolumeDeficitToDisplayInMl * 0.033814 * 10) / 10
+                                val fluidTotalIntakeInOz = (eventWaterIntakeInMl.toDouble() * 0.033814).toBigDecimal().setScale(1, RoundingMode.DOWN).toDouble()
+                                val sodiumTotalIntakeInMg = (sweatSodiumTotalLossInMg.toShort() - sweatSodiumDeficitInMg).toUShort()
+
+                                initialSweatDataSetForPlot.add(HistoricalSweatDataPacket(timeStamp, sweatVolumeDeficitInOz, sweatSodiumDeficitInMg,
+                                    sweatVolumeTotalLossInOz, sweatSodiumTotalLossInMg, fluidTotalIntakeInOz, sodiumTotalIntakeInMg,
+                                    bodyTemperatureSkinInC, bodyTemperatureAirInC, activityCounts))
+                            }
+
                         }
                         //else {
                         //    Log.d("DUPLICATE TEST", "*** FOUND DUPLICATE ***")
@@ -692,12 +717,20 @@ class UARTRepository @Inject internal constructor(
 
                     val uartServiceData = data.value
                     if (uartServiceData.sweatDataLogDownloadCompleted) {
-                        if ((userId.substring(0, 8) != sweatDataLogSessionUserID) || (enterpriseId != sweatDataLogSessionSiteID)) {
+                        if (isDemoOnboardingFlow) {
+                            _data.value = _data.value.copy(isAlreadyInSession = false)
+                            isCurrentUserSession = true
+                            isUserSessionToDisplay = true
+                            //Log.d("*****isAlreadyInSession", "TRUE")
+                        }
+
+                        else if ((userId.substring(0, 8) != sweatDataLogSessionUserID) || (enterpriseId != sweatDataLogSessionSiteID)) {
                             _data.value = _data.value.copy(isAlreadyInSession = true)
                             isCurrentUserSession = false
                             isUserSessionToDisplay = false
                             //Log.d("*****isAlreadyInSession", "TRUE")
                         }
+
                         else {
                             _data.value = _data.value.copy(isAlreadyInSession = false)
                             isCurrentUserSession = true
@@ -931,6 +964,9 @@ class UARTRepository @Inject internal constructor(
             "sweatLog_" + sweatDataLogFileIDString + "_" + generateCurrentTimeStamp() + ".csv"
         val fullSweatDataLogCSVText = sweatLogMetaDataString + sweatDataLogCSVText
 
+        // DEMO-DEMO mode support
+        demoSweatDataLogCSVText = fullSweatDataLogCSVText
+
         resetSweatDataLogCSVText()
 
         File(applicationContext?.filesDir, sweatDataLogFileName).writeBytes(fullSweatDataLogCSVText.toByteArray())
@@ -1077,6 +1113,20 @@ class UARTRepository @Inject internal constructor(
      */
     fun clearUploadDataDuplicateHasMap() {
         uploadDataDuplicateHashMap.clear()
+    }
+
+    // Support for DEMO-DEMO uploads to datadog
+    fun getDemoSweatDataLogCSVText(): String {
+        return demoSweatDataLogCSVText
+    }
+
+    // Set/clear demo mode flag for skipping session information comparison for data file storage to Datadog log
+    fun setDemoOnboardingFlow(mode: Boolean) {
+        isDemoOnboardingFlow = mode
+    }
+
+    fun setCurrentDayDownloadingCompletedFlag(state: Boolean) {
+        currentDayDownloadingCompletedFlagForHistoricalData = state
     }
 
 }

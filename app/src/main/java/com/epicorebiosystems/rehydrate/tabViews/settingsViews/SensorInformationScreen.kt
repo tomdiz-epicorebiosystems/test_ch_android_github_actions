@@ -556,9 +556,9 @@ fun SensorInformationScreen(chViewModel: ModelData, ebsDeviceMonitor: EBSDeviceM
                                     checkedThumbColor = Color.White,
                                     checkedTrackColor = colorResource(R.color.waterFull),
                                     checkedBorderColor = colorResource(R.color.waterFull),
-                                    uncheckedThumbColor = Color.White,
-                                    uncheckedTrackColor = colorResource(R.color.waterFull),
-                                    uncheckedBorderColor = colorResource(R.color.waterFull),
+                                    uncheckedThumbColor = colorResource(R.color.switch_off_thumb),
+                                    uncheckedTrackColor = colorResource(R.color.switch_off_track),
+                                    uncheckedBorderColor = colorResource(R.color.switch_off_boarder),
                                 )
                             )
                         }
@@ -737,6 +737,7 @@ fun SensorInformationScreen(chViewModel: ModelData, ebsDeviceMonitor: EBSDeviceM
                                                         Log.d("scanDeviceData", "Delay complete!")
                                                         if (!chViewModel.sweatDataCurrentDayDownloadingCompleted) {
                                                             chViewModel.sweatDataCurrentDayDownloadingCompleted= true
+                                                            ebsDeviceMonitor.setCurrentDayDownloadingCompletedFlagForHistoricalData(true)
                                                         }
 
                                                         if (!chViewModel.sweatDataMultiDaySyncWithSensorCompleted) {

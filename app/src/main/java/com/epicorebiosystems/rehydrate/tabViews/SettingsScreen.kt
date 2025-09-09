@@ -94,6 +94,13 @@ fun SettingsScreen(chViewModel: ModelData,  ebsDeviceMonitor: EBSDeviceMonitor, 
     ) {
         BgStatusView(chViewModel, ebsDeviceMonitor)
 
+        if (chViewModel.scrollEnableShareSettingsView) {
+            coroutineScope.launch {
+                settingsScrollState.scrollTo(0)
+                chViewModel.scrollEnableShareSettingsView = false
+            }
+        }
+
         if (chViewModel.scrollSettingsView) {
             coroutineScope.launch {
                 settingsScrollState.scrollTo(settingsScrollState.maxValue)
@@ -229,7 +236,7 @@ fun AccountSettingsView(navController: NavController, width: Dp, chViewModel: Mo
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Text(chViewModel.usersEmailAddress.value,
+            Text(if (chViewModel.isDemoOnboardingFlow.value) "demo@demo.com" else chViewModel.usersEmailAddress.value,
                 Modifier
                     .padding(end = 20.dp, top = 10.dp)
                     .alignByBaseline(),
@@ -254,7 +261,7 @@ fun AccountSettingsView(navController: NavController, width: Dp, chViewModel: Mo
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Text(if (chViewModel.isTestAccount()) "EBS" else chViewModel.jwtEnterpriseID.value,
+            Text(if (chViewModel.isTestAccount()) "EBS" else ( if (chViewModel.isDemoOnboardingFlow.value) "DEMO" else chViewModel.jwtEnterpriseID.value),
                 Modifier
                     .padding(end = 20.dp, top = 10.dp)
                     .alignByBaseline(),
@@ -280,7 +287,7 @@ fun AccountSettingsView(navController: NavController, width: Dp, chViewModel: Mo
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Text(if (chViewModel.isTestAccount()) "TES1" else chViewModel.jwtSiteID.value,
+            Text(if (chViewModel.isTestAccount()) "TES1" else ( if (chViewModel.isDemoOnboardingFlow.value) "DEMO" else chViewModel.jwtSiteID.value),
                 Modifier
                     .padding(end = 20.dp, top = 10.dp, bottom = 10.dp)
                     .alignByBaseline(),
@@ -345,6 +352,7 @@ fun DataSharingSettingsView(chViewModel: ModelData, width: Dp, showHeading: Bool
                 checked = switchShareAnonymousEnterpriseState,
                 onCheckedChange = {
                     switchShareAnonymousEnterpriseState = it
+                    chViewModel.switchShareAnonymousDataEnterprise = it
                     scopeSetPrivacy.launch {
                         chViewModel.networkManager.setUserInfo(switchShareAnonymousEpicoreState, switchShareAnonymousEnterpriseState)
                     } },
@@ -352,9 +360,9 @@ fun DataSharingSettingsView(chViewModel: ModelData, width: Dp, showHeading: Bool
                     checkedThumbColor = Color.White,
                     checkedTrackColor = colorResource(R.color.waterFull),
                     checkedBorderColor = colorResource(R.color.waterFull),
-                    uncheckedThumbColor = Color.White,
-                    uncheckedTrackColor = colorResource(R.color.waterFull),
-                    uncheckedBorderColor = colorResource(R.color.waterFull),
+                    uncheckedThumbColor = if (!showHeading) colorResource(R.color.switch_off_onboard_thumb) else colorResource(R.color.switch_off_thumb),
+                    uncheckedTrackColor = if (!showHeading) colorResource(R.color.switch_off_onboard_track) else colorResource(R.color.switch_off_track),
+                    uncheckedBorderColor = if (!showHeading) colorResource(R.color.switch_off_onboard_boarder) else colorResource(R.color.switch_off_boarder),
                 )
 
             )
@@ -380,23 +388,44 @@ fun DataSharingSettingsView(chViewModel: ModelData, width: Dp, showHeading: Bool
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                Switch(
-                    modifier = Modifier.testTag("toggle_datasharingsettingsview_epicore"),
-                    checked = switchShareAnonymousEpicoreState,
-                    onCheckedChange = {
-                        switchShareAnonymousEpicoreState = it
-                        scopeSetPrivacy.launch {
-                            chViewModel.networkManager.setUserInfo(switchShareAnonymousEpicoreState, switchShareAnonymousEnterpriseState)
-                        } },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = Color.White,
-                        checkedTrackColor = colorResource(R.color.waterFull),
-                        checkedBorderColor = colorResource(R.color.waterFull),
-                        uncheckedThumbColor = Color.White,
-                        uncheckedTrackColor = colorResource(R.color.waterFull),
-                        uncheckedBorderColor = colorResource(R.color.waterFull),
+                if (chViewModel.isDemoOnboardingFlow.value) {
+                    Switch(
+                        checked = false,
+                        onCheckedChange = {
+                        },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = colorResource(R.color.waterFull),
+                            checkedBorderColor = colorResource(R.color.waterFull),
+                            uncheckedThumbColor = colorResource(R.color.switch_off_thumb),
+                            uncheckedTrackColor = colorResource(R.color.switch_off_track),
+                            uncheckedBorderColor = colorResource(R.color.switch_off_boarder),
+                        )
                     )
-                )
+                }
+                else {
+                    Switch(
+                        checked = switchShareAnonymousEpicoreState,
+                        onCheckedChange = {
+                            switchShareAnonymousEpicoreState = it
+                            chViewModel.switchShareAnonymousDataEpicore = it
+                            scopeSetPrivacy.launch {
+                                chViewModel.networkManager.setUserInfo(
+                                    switchShareAnonymousEpicoreState,
+                                    switchShareAnonymousEnterpriseState
+                                )
+                            }
+                        },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = colorResource(R.color.waterFull),
+                            checkedBorderColor = colorResource(R.color.waterFull),
+                            uncheckedThumbColor = colorResource(R.color.switch_off_thumb),
+                            uncheckedTrackColor = colorResource(R.color.switch_off_track),
+                            uncheckedBorderColor = colorResource(R.color.switch_off_boarder),
+                        )
+                    )
+                }
             }
 
             Text(
@@ -546,9 +575,9 @@ fun ModuleSettingsView(chViewModel: ModelData, ebsDeviceMonitor: EBSDeviceMonito
                     checkedThumbColor = Color.White,
                     checkedTrackColor = colorResource(R.color.waterFull),
                     checkedBorderColor = colorResource(R.color.waterFull),
-                    uncheckedThumbColor = Color.White,
-                    uncheckedTrackColor = colorResource(R.color.waterFull),
-                    uncheckedBorderColor = colorResource(R.color.waterFull),
+                    uncheckedThumbColor = colorResource(R.color.switch_off_thumb),
+                    uncheckedTrackColor = colorResource(R.color.switch_off_track),
+                    uncheckedBorderColor = colorResource(R.color.switch_off_boarder),
                 )
             )
         }
@@ -576,15 +605,17 @@ fun ModuleSettingsView(chViewModel: ModelData, ebsDeviceMonitor: EBSDeviceMonito
                     switchPassiveLossState.value = it
                     scopePassiveWaterLossState.launch {
                         chViewModel.updatePassiveWaterLossState(switchPassiveLossState.value)
+                        ebsDeviceMonitor.setPassiveWaterLoss(switchPassiveLossState.value)
+                        ebsDeviceMonitor.clearDuplicateHash()
                         ebsDeviceMonitor.clearHistoricalDataSet()
                     } },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
                     checkedTrackColor = colorResource(R.color.waterFull),
                     checkedBorderColor = colorResource(R.color.waterFull),
-                    uncheckedThumbColor = Color.White,
-                    uncheckedTrackColor = colorResource(R.color.waterFull),
-                    uncheckedBorderColor = colorResource(R.color.waterFull),
+                    uncheckedThumbColor = colorResource(R.color.switch_off_thumb),
+                    uncheckedTrackColor = colorResource(R.color.switch_off_track),
+                    uncheckedBorderColor = colorResource(R.color.switch_off_boarder),
                 )
             )
         }
@@ -622,9 +653,9 @@ fun ModuleSettingsView(chViewModel: ModelData, ebsDeviceMonitor: EBSDeviceMonito
                         checkedThumbColor = Color.White,
                         checkedTrackColor = colorResource(R.color.waterFull),
                         checkedBorderColor = colorResource(R.color.waterFull),
-                        uncheckedThumbColor = Color.White,
-                        uncheckedTrackColor = colorResource(R.color.waterFull),
-                        uncheckedBorderColor = colorResource(R.color.waterFull),
+                        uncheckedThumbColor = colorResource(R.color.switch_off_thumb),
+                        uncheckedTrackColor = colorResource(R.color.switch_off_track),
+                        uncheckedBorderColor = colorResource(R.color.switch_off_boarder),
                     )
                 )
             }
@@ -791,6 +822,7 @@ fun LegalRegulatoryView(chViewModel: ModelData, ebsDeviceMonitor: EBSDeviceMonit
                         chViewModel.networkManager.logOutUser()
                         chViewModel.onboardingStep = 1
                         chViewModel.updateOnBoardingComplete(false)
+                        chViewModel.updateDemoDemoMode(false)
                         ebsDeviceMonitor.scanBluetoothDevice()
 
                         // Restart the application in case user used email button for code

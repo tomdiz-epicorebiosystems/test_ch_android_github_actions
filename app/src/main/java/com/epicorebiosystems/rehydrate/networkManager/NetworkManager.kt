@@ -250,9 +250,9 @@ class NetworkManager(chViewModel: ModelData) {
             GlobalRumMonitor.get().addError("getUserLoginContext() - Error: Unknown host DNS lookup failed.", RumErrorSource.LOGGER, null, emptyMap<String, Any>())
             return LoginContext(userStatus = null, enterprise = null, error = "Error: Unknown host DNS lookup failed.")
         } catch (cause: Exception) {
-            println("Error: {cause.localizedMessage}")
-            GlobalRumMonitor.get().addError("getUserLoginContext() - Error: {cause.localizedMessage}", RumErrorSource.LOGGER, null, emptyMap<String, Any>())
-            return LoginContext(userStatus = null, enterprise = null, error = "Error: {cause.localizedMessage}")
+            println("Error: " + cause.localizedMessage)
+            GlobalRumMonitor.get().addError("getUserLoginContext() - Error: " + cause.localizedMessage, RumErrorSource.LOGGER, null, emptyMap<String, Any>())
+            return LoginContext(userStatus = null, enterprise = null, error = "Error: " + cause.localizedMessage)
         }
     }
 
@@ -346,9 +346,9 @@ class NetworkManager(chViewModel: ModelData) {
             GlobalRumMonitor.get().addError("sendCode() - Error: Unknown host DNS lookup failed.", RumErrorSource.LOGGER, null, emptyMap<String, Any>())
             return SendCodeResult(result = null, error = "Error: Unknown host DNS lookup failed.")
         } catch (cause: Exception) {
-            println("Error: {cause.localizedMessage}")
-            GlobalRumMonitor.get().addError("sendCode() - Error: {cause.localizedMessage}", RumErrorSource.LOGGER, null, emptyMap<String, Any>())
-            return SendCodeResult(result = null, error = "Error: {cause.localizedMessage}")
+            println("Error: " + cause.localizedMessage)
+            GlobalRumMonitor.get().addError("sendCode() - Error: " + cause.localizedMessage, RumErrorSource.LOGGER, null, emptyMap<String, Any>())
+            return SendCodeResult(result = null, error = "Error: " + cause.localizedMessage)
         }
     }
 
@@ -438,7 +438,7 @@ class NetworkManager(chViewModel: ModelData) {
     }
 
     suspend fun getUserHistoryStats(): String? {
-        if (!chViewModel.isNetworkConnected) {
+        if (!chViewModel.isNetworkConnected || chViewModel.isDemoOnboardingFlow.value) {
             return null
         }
         try {
@@ -507,14 +507,14 @@ class NetworkManager(chViewModel: ModelData) {
             GlobalRumMonitor.get().addError("getUserHistoryStats() - Error: Unknown host DNS lookup failed.", RumErrorSource.LOGGER, null, emptyMap<String, Any>())
             return "Error: Unknown host DNS lookup failed."
         } catch (cause: Exception) {
-            println("Error: {cause.localizedMessage}")
-            GlobalRumMonitor.get().addError("getUserHistoryStats() - Error: {cause.localizedMessage}", RumErrorSource.LOGGER, null, emptyMap<String, Any>())
-            return "Error: {cause.localizedMessage}"
+            println("Error: " + cause.localizedMessage)
+            GlobalRumMonitor.get().addError("getUserHistoryStats() - Error: " + cause.localizedMessage, RumErrorSource.LOGGER, null, emptyMap<String, Any>())
+            return "Error: " + cause.localizedMessage
         }
     }
 
     suspend fun getAvgSweatVolumeSodiumConcentration(): String? {
-        if (!chViewModel.isNetworkConnected) {
+        if (!chViewModel.isNetworkConnected || chViewModel.isDemoOnboardingFlow.value) {
             return null
         }
 
@@ -588,13 +588,16 @@ class NetworkManager(chViewModel: ModelData) {
             GlobalRumMonitor.get().addError("getAvgSweatVolumeSodiumConcentration() - Error: Unknown host DNS lookup failed.", RumErrorSource.LOGGER, null, emptyMap<String, Any>())
             return "Error: Unknown host DNS lookup failed."
         } catch (cause: Exception) {
-            println("Error: {cause.localizedMessage}")
-            GlobalRumMonitor.get().addError("getAvgSweatVolumeSodiumConcentration() - Error: {cause.localizedMessage}", RumErrorSource.LOGGER, null, emptyMap<String, Any>())
-            return "Error: {cause.localizedMessage}"
+            println("Error: " + cause.localizedMessage)
+            GlobalRumMonitor.get().addError("getAvgSweatVolumeSodiumConcentration() - Error: " + cause.localizedMessage, RumErrorSource.LOGGER, null, emptyMap<String, Any>())
+            return "Error: " + cause.localizedMessage
         }
     }
 
     suspend fun updateUser(enterpriseId: String, siteId: String, userInfo: Map<String, Any>): String? {
+        if (chViewModel.isDemoOnboardingFlow.value) {
+            return null
+        }
         try {
             chViewModel.isUpdateUserCalled = true
             val token = chViewModel.encryptedPreferences.getString("access_token", "")
@@ -695,14 +698,14 @@ class NetworkManager(chViewModel: ModelData) {
             return "Error: Unknown host DNS lookup failed."
         } catch (cause: Exception) {
             chViewModel.updateUserSuccess = false
-            println("Error: {cause.localizedMessage}")
-            GlobalRumMonitor.get().addError("updateUser() - Error: {cause.localizedMessage}", RumErrorSource.LOGGER, null, emptyMap<String, Any>())
-            return "Error: {cause.localizedMessage}"
+            println("Error: " + cause.localizedMessage)
+            GlobalRumMonitor.get().addError("updateUser() - Error: " + cause.localizedMessage, RumErrorSource.LOGGER, null, emptyMap<String, Any>())
+            return "Error: " + cause.localizedMessage
         }
     }
 
     suspend fun getUserInfo(): String? {
-        if (!chViewModel.isNetworkConnected) {
+        if (!chViewModel.isNetworkConnected || chViewModel.isDemoOnboardingFlow.value) {
             return null
         }
         try {
@@ -888,22 +891,29 @@ class NetworkManager(chViewModel: ModelData) {
             GlobalRumMonitor.get().addError("getUserPrivacyInfo() - Error: Unknown host DNS lookup failed.", RumErrorSource.LOGGER, null, emptyMap<String, Any>())
             return "Error: Unknown host DNS lookup failed."
         } catch (cause: Exception) {
-            println("Error: {cause.localizedMessage}")
-            GlobalRumMonitor.get().addError("getUserPrivacyInfo() - Error: {cause.localizedMessage}", RumErrorSource.LOGGER, null, emptyMap<String, Any>())
-            return "Error: {cause.localizedMessage}"
+            println("Error: " + cause.localizedMessage)
+            GlobalRumMonitor.get().addError("getUserPrivacyInfo() - Error: " + cause.localizedMessage, RumErrorSource.LOGGER, null, emptyMap<String, Any>())
+            return "Error: " + cause.localizedMessage
         }
     }
 
     suspend fun setUserInfo(epicore: Boolean, site: Boolean): String? {
-        if (!chViewModel.isNetworkConnected) {
+        if (!chViewModel.isNetworkConnected || chViewModel.isDemoOnboardingFlow.value) {
             return null
         }
+
+        chViewModel.switchShareAnonymousDataEpicore = epicore
+        chViewModel.switchShareAnonymousDataEnterprise = site
+
         try {
             val token = chViewModel.encryptedPreferences.getString("access_token", "")
                 ?.replace("\"", "")
                 ?: return null
-            val httpBody =
-                "[\"agreements\": [\"share_stats_with_epicore\": ${epicore}, \"share_stats_with_site\": [${chViewModel.enterpriseId.value} : ${site}]]"
+            val agreementInfo = mapOf(
+                "agreements" to mapOf("share_stats_with_epicore" to epicore, "share_stats_with_site" to mapOf(chViewModel.enterpriseId.value to site)),
+            )
+            val gson = Gson()
+            val jsonString = gson.toJson(agreementInfo)
             var cookie =
                 "selectedUserRoles=[{\"enterprise_id\": \"${chViewModel.jwtEnterpriseID.value}\",\"role\":\"CH_USER\",\"site_id\": \"${chViewModel.jwtSiteID.value}\"}]"
             if (chViewModel.getCurrentLocale() == "ja_JP") {
@@ -911,7 +921,7 @@ class NetworkManager(chViewModel: ModelData) {
             }
             val serverReturnString: String = client.patch(apiServerInfo.getUserInfoUrl()) {
                 headers {
-                    setBody(httpBody)
+                    setBody(jsonString)
                     append("api-version", "2")
                     append(HttpHeaders.Authorization, "Bearer $token")
                     append(HttpHeaders.Cookie, cookie)
@@ -932,8 +942,8 @@ class NetworkManager(chViewModel: ModelData) {
                         serverReturnString,
                         UserPrivacyInfo::class.java)
                 val enterpriseDataShare = userPrivacy.agreements.share_stats_with_site
-                chViewModel.switchShareAnonymousDataEnterprise = enterpriseDataShare?.get(chViewModel.enterpriseId.value) ?: false
-                chViewModel.switchShareAnonymousDataEpicore = userPrivacy.agreements.share_stats_with_epicore ?: false
+                chViewModel.switchShareAnonymousDataEnterprise = enterpriseDataShare?.get(chViewModel.enterpriseId.value) ?: true
+                chViewModel.switchShareAnonymousDataEpicore = userPrivacy.agreements.share_stats_with_epicore ?: true
                 null
             }
         } catch (ex: RedirectResponseException) {
@@ -968,9 +978,9 @@ class NetworkManager(chViewModel: ModelData) {
             GlobalRumMonitor.get().addError("setUserPrivacyInfo() - Error: Unknown host DNS lookup failed.", RumErrorSource.LOGGER, null, emptyMap<String, Any>())
             return "Error: Unknown host DNS lookup failed."
         } catch (cause: Exception) {
-            println("Error: {cause.localizedMessage}")
-            GlobalRumMonitor.get().addError("setUserPrivacyInfo() - Error: {cause.localizedMessage}", RumErrorSource.LOGGER, null, emptyMap<String, Any>())
-            return "Error: {cause.localizedMessage}"
+            println("Error: " + cause.localizedMessage)
+            GlobalRumMonitor.get().addError("setUserPrivacyInfo() - Error: " + cause.localizedMessage, RumErrorSource.LOGGER, null, emptyMap<String, Any>())
+            return "Error: " + cause.localizedMessage
         }
     }
 
@@ -978,7 +988,7 @@ class NetworkManager(chViewModel: ModelData) {
     // New standard using: https://auth0.com/docs/get-started/authentication-and-authorization-flow/call-your-api-using-the-authorization-code-flow-with-pkce#example-post-to-token-url
     @OptIn(InternalAPI::class)
     suspend fun getNewRefreshToken(): String? {
-        if (!chViewModel.isNetworkConnected) {
+        if (!chViewModel.isNetworkConnected || chViewModel.isDemoOnboardingFlow.value) {
             return null
         }
         try {
@@ -1067,14 +1077,17 @@ class NetworkManager(chViewModel: ModelData) {
             GlobalRumMonitor.get().addError("getNewRefreshToken() - Error: Unknown host DNS lookup failed.", RumErrorSource.LOGGER, null, emptyMap<String, Any>())
             return "Error: Unknown host DNS lookup failed."
         } catch (cause: Exception) {
-            println("Error: {cause.localizedMessage}")
-            GlobalRumMonitor.get().addError("getNewRefreshToken() - Error: {cause.localizedMessage}", RumErrorSource.LOGGER, null, emptyMap<String, Any>())
-            return "Error: {cause.localizedMessage}"
+            println("Error: " + cause.localizedMessage)
+            GlobalRumMonitor.get().addError("getNewRefreshToken() - Error: " + cause.localizedMessage, RumErrorSource.LOGGER, null, emptyMap<String, Any>())
+            return "Error: " + cause.localizedMessage
         }
     }
 
     suspend fun logOutUser() {
         if (!chViewModel.isNetworkConnected) {
+            return
+        }
+        if (chViewModel.isDemoOnboardingFlow.value) {
             return
         }
         try {
@@ -1119,8 +1132,8 @@ class NetworkManager(chViewModel: ModelData) {
             GlobalRumMonitor.get().addError("logOutUser() - Error: Unknown host DNS lookup failed.", RumErrorSource.LOGGER, null, emptyMap<String, Any>())
             println("Error: Unknown host DNS lookup failed.")
         } catch (cause: Exception) {
-            GlobalRumMonitor.get().addError("logOutUser() - Error: {cause.localizedMessage}", RumErrorSource.LOGGER, null, emptyMap<String, Any>())
-            println("Error: {cause.localizedMessage}")
+            GlobalRumMonitor.get().addError("logOutUser() - Error: " + cause.localizedMessage, RumErrorSource.LOGGER, null, emptyMap<String, Any>())
+            println("Error: " + cause.localizedMessage)
         }
     }
 
@@ -1198,6 +1211,9 @@ class NetworkManager(chViewModel: ModelData) {
     }
 
     fun isTokenValid(): Boolean {
+        if (chViewModel.isDemoOnboardingFlow.value) {
+            return true
+        }
         val token = chViewModel.encryptedPreferences.getString("access_token", "")
             ?.replace("\"", "")
             ?: return false
@@ -1336,8 +1352,8 @@ class NetworkManager(chViewModel: ModelData) {
             GlobalRumMonitor.get().addError("uploadSensorCSVFile() - Error: Unknown host DNS lookup failed.", RumErrorSource.LOGGER, null, emptyMap<String, Any>())
             println("Error: Unknown host DNS lookup failed.")
         } catch (cause: Exception) {
-            GlobalRumMonitor.get().addError("uploadSensorCSVFile() - Error: {cause.localizedMessage}", RumErrorSource.LOGGER, null, emptyMap<String, Any>())
-            println("Error: {cause.localizedMessage}")
+            GlobalRumMonitor.get().addError("uploadSensorCSVFile() - Error: " + cause.localizedMessage, RumErrorSource.LOGGER, null, emptyMap<String, Any>())
+            println("Error: " + cause.localizedMessage)
         }
     }
 

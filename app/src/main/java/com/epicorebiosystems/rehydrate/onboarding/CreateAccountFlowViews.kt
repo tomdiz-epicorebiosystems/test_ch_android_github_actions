@@ -474,36 +474,58 @@ fun CreateAccountMainView(chViewModel: ModelData, navController: NavController) 
                                 chViewModel.enterpriseId.value = chViewModel.onboardingEnterpriseId.value
                             }
 
-                            if (isValidEnterpriseCode(chViewModel.onboardingEnterpriseId.value)) {
+                        if (chViewModel.onboardingEnterpriseId.value == "DEMO-DEMO") {
+                            chViewModel.usersEmailAddress.value = "demo@demo.com"
+                            chViewModel.onboardingEnterpriseName.value = "Demo"
+                            chViewModel.jwtEnterpriseID.value = "DEMO"
+                            chViewModel.jwtSiteID.value = "DEMO"
+                            chViewModel.enterpriseId.value = "DEMO-DEMO"
+                            chViewModel.currentAuthUserId.value = "9911ff32-957c-4f39-a754-e381ad7c3a2c"
+                            chViewModel.CH_UserRole.value = "CH_USER"
 
-                                showNetworkProgress = true
+                            chViewModel.isDemoOnboardingFlow.value = true
+                            chViewModel.updateDemoDemoMode(true)
 
-                                //chViewModel.CH_EnterpriseName.value = ""
-                                //chViewModel.CH_SiteName.value = ""
-                                //chViewModel.onboardingEnterpriseName.value = ""
-                                //chViewModel.onboardingSiteName.value = ""
+                            chViewModel.switchShareAnonymousDataEpicore = false
 
-                                scope.launch {
+                            chViewModel.onboardingStep = 2
+                            navController.navigate(OnboardingScreens.InitialSetupView.route)
+                            return@trackClick
+                        }
 
-                                    val enterpriseInfo = chViewModel.networkManager.getEnterpriseName(chViewModel.onboardingEnterpriseId.value)
+                        if (isValidEnterpriseCode(chViewModel.onboardingEnterpriseId.value)) {
 
-                                    if (enterpriseInfo.error != null) {
-                                        showServerErrorMsg = true
-                                        serverErrorMsg = enterpriseInfo.error
-                                    }
-                                    else {
-                                        chViewModel.onboardingEnterpriseName.value = enterpriseInfo.enterpriseName.toString()
-                                        chViewModel.onboardingSiteName.value = enterpriseInfo.siteName.toString()
-                                        navController.navigate(OnboardingScreens.CreateAccountConfirmEnterprise.route)
-                                    }
-                                    showNetworkProgress = false
+                            showNetworkProgress = true
+
+                            chViewModel.isDemoOnboardingFlow.value = false
+                            chViewModel.updateDemoDemoMode(false)
+
+                            //chViewModel.CH_EnterpriseName.value = ""
+                            //chViewModel.CH_SiteName.value = ""
+                            //chViewModel.onboardingEnterpriseName.value = ""
+                            //chViewModel.onboardingSiteName.value = ""
+
+                            scope.launch {
+
+                                val enterpriseInfo = chViewModel.networkManager.getEnterpriseName(chViewModel.onboardingEnterpriseId.value)
+
+                                if (enterpriseInfo.error != null) {
+                                    showServerErrorMsg = true
+                                    serverErrorMsg = enterpriseInfo.error
                                 }
+                                else {
+                                    chViewModel.onboardingEnterpriseName.value = enterpriseInfo.enterpriseName.toString()
+                                    chViewModel.onboardingSiteName.value = enterpriseInfo.siteName.toString()
+                                    chViewModel.enterpriseId.value = chViewModel.onboardingEnterpriseId.value
+                                    navController.navigate(OnboardingScreens.CreateAccountConfirmEnterprise.route)
+                                }
+                                showNetworkProgress = false
                             }
-                            else {
-                                showServerErrorMsg = true
-                                serverErrorMsg = context.resources.getString(R.string.enterpise_id_is_wrong_format)
-                            }
-                        },
+                        }
+                        else {
+                            showServerErrorMsg = true
+                            serverErrorMsg = context.resources.getString(R.string.enterpise_id_is_wrong_format)
+                        } },
                         modifier = Modifier
                             .size(width = 180.dp, height = 60.dp).testTag("button_createaccountmainview_submit"),
                         enabled = chViewModel.onboardingEnterpriseId.value.isNotEmpty(),

@@ -1,22 +1,23 @@
 plugins {
-    alias(libs.plugins.nordic.application.compose)
-    alias(libs.plugins.nordic.hilt)
-//    alias(libs.plugins.nordic.feature)
-//    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+
+    alias(libs.plugins.nordic.hilt)   // this is the java compiler issue
+
     alias(libs.plugins.ksp)
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.10"    // NOTE: This needs to match kotlin version
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.0"    // NOTE: This needs to match kotlin version
 }
 
 android {
     namespace = "com.epicorebiosystems.rehydrate"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.epicorebiosystems.rehydrate"
-        minSdk = 26
-        targetSdk = 34
-        versionCode = 33
-        versionName = "3.1.0"
+        minSdk = 29
+        targetSdk = 36
+        versionCode = 37
+        versionName = "3.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -26,42 +27,50 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String","VERSION_NAME", "\"3.1.0 (Debug)\"")
+            buildConfigField("String","VERSION_NAME", "\"3.2.0 (Debug)\"")
+            buildConfigField("String","VERSION_CODE", "\"Build 6\"")
             // *** NOTE(tsd): WHEN DOING QA BUILDS FOR AUTOMATED TESTING CHANGE THIS TO 'true' ***
             buildConfigField("Boolean","QA_TESTING", "false")
-            buildConfigField("String","VERSION_CODE", "\"Build 9\"")
             isMinifyEnabled = false
         }
         release {
-            buildConfigField("String","VERSION_NAME", "\"3.1.0\"")
+            buildConfigField("String","VERSION_NAME", "\"3.2.0\"")
+            buildConfigField("String","VERSION_CODE", "\"Build 6\"")
             // *** NOTE(tsd): THIS SHOULD ALWAYS BE 'FALSE' FOR RELEASE BUILDS ***
             buildConfigField("Boolean","QA_TESTING", "false")
-            buildConfigField("String","VERSION_CODE", "\"Build 9\"")
             isShrinkResources = true
             isMinifyEnabled = true
-            proguardFiles("proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
         buildConfig = true
     }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
 }
 
 dependencies {
-
+/*
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+*/
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
@@ -89,7 +98,7 @@ dependencies {
     implementation("androidx.camera:camera-camera2:1.0.2")
     implementation("androidx.camera:camera-lifecycle:1.0.2")
     implementation("androidx.camera:camera-view:1.0.0-alpha31")
-    implementation("com.google.mlkit:barcode-scanning:17.2.0")
+    implementation("com.google.mlkit:barcode-scanning:17.3.0")
 
     // Ktor Internet library
     implementation("io.ktor:ktor-client-core:2.3.6")

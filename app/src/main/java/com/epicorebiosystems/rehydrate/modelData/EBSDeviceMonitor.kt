@@ -292,6 +292,8 @@ class EBSDeviceMonitor @Inject constructor(
     fun disconnect() {
         // Clear all the flags for downloading and uploading upon disconnection.
         chViewModel.sweatDataCurrentDayDownloadingCompleted = true
+        setCurrentDayDownloadingCompletedFlagForHistoricalData(true)
+
         chViewModel.sweatDataMultiDaySyncWithSensorCompleted = true
         chViewModel.historicalSweatDataDownloadCompleted = true
         chViewModel.setCsvFileIsUploading(false)
@@ -411,6 +413,8 @@ class EBSDeviceMonitor @Inject constructor(
         //Log.d("scanPreviousDayDeviceData", "scanPreviousDayDeviceData() called")
 
         chViewModel.sweatDataCurrentDayDownloadingCompleted = false
+        setCurrentDayDownloadingCompletedFlagForHistoricalData(false)
+
         chViewModel.sweatDataMultiDaySyncWithSensorCompleted = false
 
         // Already downloading
@@ -423,6 +427,8 @@ class EBSDeviceMonitor @Inject constructor(
         if (!chViewModel._isSensorConnected.value) {
             setFileReadyUploadFlag(false)
             chViewModel.sweatDataCurrentDayDownloadingCompleted = true
+            setCurrentDayDownloadingCompletedFlagForHistoricalData(true)
+
             chViewModel.setCsvFileIsUploading(false)
             return
         }
@@ -611,6 +617,18 @@ class EBSDeviceMonitor @Inject constructor(
 
     fun clearDuplicateHash() {
         uartRepository.clearUploadDataDuplicateHasMap()
+    }
+
+    fun getDemoSweatDataLogCSVText(): String {
+        return uartRepository.getDemoSweatDataLogCSVText()
+    }
+
+    fun setDemoOnboardingFlow(mode: Boolean) {
+        uartRepository.setDemoOnboardingFlow(mode)
+    }
+
+    fun setCurrentDayDownloadingCompletedFlagForHistoricalData(state: Boolean) {
+        uartRepository.setCurrentDayDownloadingCompletedFlag(state)
     }
 
 }

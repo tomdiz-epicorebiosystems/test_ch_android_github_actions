@@ -236,28 +236,16 @@ fun EditEnterpriseScreen(navController: NavController, ebsDeviceMonitor: EBSDevi
                                                 "biologicalSex" to if (chViewModel.userGender.value == "Male") "male" else "female"
                                             )
 
-//                                            chViewModel.onboardingEnterpriseId.value = jwtEnterpriseID.value + "-" + jwtSiteID.value
-//                                            chViewModel.enterpriseId.value = chViewModel.onboardingEnterpriseId.value
-
-//                                            if(!chViewModel.onboardingComplete.value) {
-//                                                val enterpriseInfo =
-//                                                    chViewModel.networkManager.getEnterpriseName(
-//                                                        chViewModel.onboardingEnterpriseId.value
-//                                                    )
-//
-//                                                if (enterpriseInfo.error != null) {
-//                                                    showServerErrorMsg = true
-//                                                    serverErrorMsg = enterpriseInfo.error
-//                                                } else {
-//                                                    chViewModel.onboardingEnterpriseName.value =
-//                                                        enterpriseInfo.enterpriseName.toString()
-//                                                    chViewModel.onboardingSiteName.value =
-//                                                        enterpriseInfo.siteName.toString()
-//                                                }
-//                                            }
+                                            // If DEMO-DEMO you can't update enterprise/site ID
+                                            if (chViewModel.isDemoOnboardingFlow.value) {
+                                                showNetworkProgress = false
+                                                updateHideBottomBar(false)
+                                                navController.navigateUp()
+                                                return@launch
+                                            }
 
                                             if(chViewModel.networkManager.isTokenValid()) {
-                                                var serverError =
+                                                val serverError =
                                                     chViewModel.networkManager.updateUser(
                                                         enterpriseId = jwtEnterpriseID.value,
                                                         siteId = jwtSiteID.value,

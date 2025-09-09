@@ -7,7 +7,7 @@
     <string name="your_sweat_profile">現在の発汗状態</string>
     <string name="insights_light">ライト</string>
     <string name="insights_moderate">適度</string>
-    <string name="insights_heavy">重い</string>
+    <string name="insights_heavy">高い</string>
     <string name="sweat_volume">発汗量</string>
     <string name="insights_low">低い</string>
     <string name="insights_medium">中くらい</string>
@@ -527,5 +527,17 @@
     <string name="exit">出口</string>
     <string name="smart_phone">スマートフォン</string>
     <string name="internet_conn">インターネット\n接続</string>
+    <string name="epicore_share_disabled">設定に移動し、Epicoreとのデータ共有を有効にすると、データを表示できます。</string>
+    <string name="insights_string_low_low">発汗量が少なく、ナトリウム濃度も低いため、通常、水分補給の必要量は控えめです。通常の活動中であれば、同世代の人たちほど多くの水分や電解質を補給する必要はないでしょう。ナトリウムの損失は通常食事でカバーできますが、必要に応じて電解質を補給してください。発汗量が少ないとはいえ、1日を通して水分補給をするように気をつけましょう。</string>
+    <string name="insights_string_low_medium">たくさん汗をかくわけではなくても、激しい運動をした日には、かなりの量のナトリウムが失われる可能性があります。ナトリウムの損失は通常、食事でカバーできますが、特に活動的な日、特にエネルギーが消耗していると感じ始めたら、電解質の追加補給を検討してください。発汗量が少ないとはいえ、1日を通して水分補給には気をつけましょう。</string>
+    <string name="insights_string_low_high">汗をかく量は他の人よりも少ないにもかかわらず、汗のナトリウム濃度は高い。これは、特に激しい運動や暑い日に当てはまります。短時間の活動であっても、電解質の補給を考慮すべきです。発汗量は少ないものの、1日を通して水分補給を心がけましょう。</string>
+    <string name="insights_string_moderate_low">こまめな水分補給を心がけましょう。ナトリウム濃度が低いにもかかわらず、適度な発汗量があるため、特に激しい運動や暑い日には、思っている以上にナトリウムが失われる可能性がある。特に体力の消耗を感じ始めたら、電解質の補給を検討しよう。</string>
+    <string name="insights_string_moderate_medium">一日を通して、一定のペースで水分と電解質を補給することを目指すべきである。水分と電解質をバランスよく補給するのが効果的です。運動量が多い日は、発汗量の増加に合わせて水分と電解質の摂取量を増やしてください。</string>
+    <string name="insights_string_moderate_high">水分の喪失量は他の選手と同程度ですが、ナトリウムの喪失量は他の選手より多くなります。一日を通してこまめに水分補給をし、電解質も補給するようにしましょう。同世代の選手よりもナトリウム濃度が高いため、食事だけでは汗で失ったナトリウムをすべて補給することは難しいでしょう。</string>
+    <string name="insights_string_heavy_low">汗による水分喪失が多いため、水分補給と電解質補給を毎日優先してください。活動前には事前に水分補給を行い、機会があれば必ず水分を補給するようにしましょう。汗のナトリウム濃度は低いものの、発汗量が多いため、予想以上にナトリウムが失われることがあります。</string>
+    <string name="insights_string_heavy_medium">発汗量が多く、ナトリウム濃度が中程度であれば、水分とナトリウムの損失は相当なものであり、コンスタントに補給する必要がある。水だけでは不十分で、電解質の補給が鍵になります。ナトリウムの必要量は食事だけでは満たせない可能性が高い。激しい運動をする日は、水分と電解質の摂取量を増やしてください。</string>
+    <string name="insights_string_heavy_high">発汗量が多く、ナトリウム濃度が高いため、脱水や電解質不均衡の危険性が高い。常に水分とナトリウムの必要量を優先するようにしてください。脱水症状や疲労の兆候に細心の注意を払い、異常を感じ始めたら躊躇せずに行動を起こしましょう。</string>
+    <string name="insights_string_type">タイプ</string>
+    <string name="insights_string_sweat_loss">発汗量</string>
 
 </resources>
