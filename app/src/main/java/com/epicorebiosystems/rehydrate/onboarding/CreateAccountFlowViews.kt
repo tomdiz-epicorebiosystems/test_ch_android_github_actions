@@ -1706,13 +1706,13 @@ fun CreateAccountUserExistsScreen(chViewModel: ModelData, navController: NavCont
                     }
                     else {*/
                     chViewModel.continueWithOnboarding = true
-                        if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
-                            scope.launch {
-                                chViewModel.networkManager.getUserInfo()
-                                chViewModel.onboardingStep = 2
-                                navController.navigate(OnboardingScreens.InitialSetupView.route)
-                            }
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                        scope.launch {
+                            chViewModel.networkManager.getUserInfo()
+                            chViewModel.onboardingStep = 2
+                            navController.navigate(OnboardingScreens.InitialSetupView.route)
                         }
+                    }
                     //}
                 },
                 shape = RoundedCornerShape(10.dp),
