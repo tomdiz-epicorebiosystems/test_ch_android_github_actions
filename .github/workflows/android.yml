@@ -25,10 +25,6 @@ jobs:
       - name: Set current date as env variable
         run: echo "date_today=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
-      # Set Repository Name As Env Variable
-      - name: Set repository name as env variable
-        run: echo "repository_name=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
-
       - name: set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -55,12 +51,14 @@ jobs:
       - name: Upload APK Debug - ${{ env.repository_name }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }}-debug
+          name: ${{ env.date_today }} - ${{ env.playstore_name }}-debug
           path: ${{ env.main_project_module }}/build/outputs/apk/debug/
-
+          retention-days: 2 # Optional: Set how long to keep the artifact
+          
       # Noted For Output [main_project_module]/build/outputs/apk/release/
       - name: Upload APK Release - ${{ env.repository_name }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }}-release
+          name: ${{ env.date_today }} - ${{ env.playstore_name }}-release
           path: ${{ env.main_project_module }}/build/outputs/apk/release/
+          retention-days: 2 # Optional: Set how long to keep the artifact
