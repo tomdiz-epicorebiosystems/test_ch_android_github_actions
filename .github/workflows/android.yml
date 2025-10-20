@@ -36,15 +36,15 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build -P QA_TESTING=true
 
       # Create APK Debug
       - name: Build apk debug project (APK) - ${{ env.main_project_module }} module
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleDebug -P QA_TESTING=true
 
        # Create APK Release
       - name: Build apk release project (APK) - ${{ env.main_project_module }} module
-        run: ./gradlew assemble
+        run: ./gradlew assemble -P QA_TESTING=true
 
       # Upload Artifact Build
       # Noted For Output [main_project_module]/build/outputs/apk/debug/
