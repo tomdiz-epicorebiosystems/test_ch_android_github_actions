@@ -8,6 +8,9 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "2.2.0"    // NOTE: This needs to match kotlin version
 }
 
+// Provide a default value if the property is not specified.
+val qaTestingBuild: Boolean = findProperty("QA_TESTING") != null
+
 android {
     namespace = "com.epicorebiosystems.rehydrate"
     compileSdk = 36
@@ -30,14 +33,14 @@ android {
             buildConfigField("String","VERSION_NAME", "\"3.2.0 (Debug)\"")
             buildConfigField("String","VERSION_CODE", "\"Build 6\"")
             // *** NOTE(tsd): WHEN DOING QA BUILDS FOR AUTOMATED TESTING CHANGE THIS TO 'true' ***
-            buildConfigField("Boolean","QA_TESTING", "false")
+            buildConfigField("Boolean","QA_TESTING", "\"$qaTestingBuild\"")
             isMinifyEnabled = false
         }
         release {
             buildConfigField("String","VERSION_NAME", "\"3.2.0\"")
             buildConfigField("String","VERSION_CODE", "\"Build 6\"")
             // *** NOTE(tsd): THIS SHOULD ALWAYS BE 'FALSE' FOR RELEASE BUILDS ***
-            buildConfigField("Boolean","QA_TESTING", "false")
+            buildConfigField("Boolean","QA_TESTING", "\"$qaTestingBuild\"")
             isShrinkResources = true
             isMinifyEnabled = true
             proguardFiles(
