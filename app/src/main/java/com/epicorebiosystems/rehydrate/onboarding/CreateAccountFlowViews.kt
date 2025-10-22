@@ -172,12 +172,18 @@ fun CreateAccountGetStartedView(chViewModel: ModelData, navController: NavContro
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        stringResource(R.string.onboarding_terms_conditions),
-                        modifier = Modifier.clickable {
-                            if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
-                                navController.navigate(SettingsSubScreens.TermsConditions.route!!)
+                        text = stringResource(R.string.onboarding_terms_conditions),
+                        modifier = Modifier
+                            .clickable {
+                                val route = SettingsSubScreens.TermsConditions.route
+                                if (
+                                    navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED &&
+                                    route != null
+                                ) {
+                                    navController.navigate(route)
+                                }
                             }
-                        }.testTag("text_createaccountgetstartedview_terms"),
+                            .testTag("text_createaccountgetstartedview_terms"),
                         fontFamily = RobotoRegularFonts,
                         fontSize = fontSize,
                         fontWeight = FontWeight.Normal,
