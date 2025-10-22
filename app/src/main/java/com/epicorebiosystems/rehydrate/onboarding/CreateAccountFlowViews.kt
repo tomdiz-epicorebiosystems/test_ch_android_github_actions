@@ -95,7 +95,8 @@ fun CreateAccountGetStartedView(chViewModel: ModelData, navController: NavContro
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        Text(stringResource(R.string.welcome_connected),
+        Text(
+            stringResource(R.string.welcome_connected),
             modifier = Modifier.testTag("text_createaccountgetstartedview_welcome"),
             fontSize = 18.sp,
             fontFamily = RobotoMediumFonts,
@@ -105,10 +106,13 @@ fun CreateAccountGetStartedView(chViewModel: ModelData, navController: NavContro
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        Text(stringResource(R.string.get_started_gather),
-            modifier = Modifier.testTag("text_createaccountgetstartedview_started_gather").semantics {
-                this.contentDescription = "text_createaccountgetstartedview_started_gather"
-            },
+        Text(
+            stringResource(R.string.get_started_gather),
+            modifier = Modifier
+                .testTag("text_createaccountgetstartedview_started_gather")
+                .semantics {
+                    this.contentDescription = "text_createaccountgetstartedview_started_gather"
+                },
             fontSize = 16.sp,
             fontFamily = OswaldFonts,
             color = Color.White,
@@ -118,7 +122,8 @@ fun CreateAccountGetStartedView(chViewModel: ModelData, navController: NavContro
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        Text(stringResource(R.string.also_need),
+        Text(
+            stringResource(R.string.also_need),
             modifier = Modifier.testTag("text_createaccountgetstartedview_need"),
             fontSize = 16.sp,
             fontFamily = OswaldFonts,
@@ -132,9 +137,21 @@ fun CreateAccountGetStartedView(chViewModel: ModelData, navController: NavContro
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier.fillMaxWidth()
         ) {
-            IconGroupDisplay(chViewModel.getCurrentLocale(), R.drawable.getstarted_phoneicon, stringResource(R.string.smart_phone))
-            IconGroupDisplay(chViewModel.getCurrentLocale(), R.drawable.getstarted_internet, stringResource(R.string.internet_conn))
-            IconGroupDisplay(chViewModel.getCurrentLocale(), R.drawable.getstarted_enterprise, stringResource(R.string.site_id_enterprise))
+            IconGroupDisplay(
+                chViewModel.getCurrentLocale(),
+                R.drawable.getstarted_phoneicon,
+                stringResource(R.string.smart_phone)
+            )
+            IconGroupDisplay(
+                chViewModel.getCurrentLocale(),
+                R.drawable.getstarted_internet,
+                stringResource(R.string.internet_conn)
+            )
+            IconGroupDisplay(
+                chViewModel.getCurrentLocale(),
+                R.drawable.getstarted_enterprise,
+                stringResource(R.string.site_id_enterprise)
+            )
         }
 
         Spacer(modifier = Modifier.weight(1f))
@@ -202,7 +219,7 @@ fun CreateAccountGetStartedView(chViewModel: ModelData, navController: NavContro
 
                 }
 
-                Row (
+                Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (!isJapanese) {
@@ -218,11 +235,13 @@ fun CreateAccountGetStartedView(chViewModel: ModelData, navController: NavContro
 
                     Text(
                         stringResource(R.string.privacy_policy),
-                        Modifier.clickable {
-                            if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
-                                navController.navigate(SettingsSubScreens.PrivacyPolicy.route!!)
+                        Modifier
+                            .clickable {
+                                if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                                    navController.navigate(SettingsSubScreens.PrivacyPolicy.route!!)
+                                }
                             }
-                        }.testTag("text_createaccountgetstartedview_privacy"),
+                            .testTag("text_createaccountgetstartedview_privacy"),
                         fontFamily = RobotoRegularFonts,
                         fontSize = fontSize,
                         fontWeight = FontWeight.Normal,
@@ -265,10 +284,13 @@ fun CreateAccountGetStartedView(chViewModel: ModelData, navController: NavContro
                 backgroundColor = Color.White
             )
         ) {
-            Text(stringResource(R.string.get_started),
-                modifier = Modifier.testTag("text_createaccountgetstartedview_started").semantics {
-                    this.contentDescription = "text_createaccountgetstartedview_started"
-                },
+            Text(
+                stringResource(R.string.get_started),
+                modifier = Modifier
+                    .testTag("text_createaccountgetstartedview_started")
+                    .semantics {
+                        this.contentDescription = "text_createaccountgetstartedview_started"
+                    },
                 fontSize = 18.sp,
                 fontFamily = OswaldFonts,
                 fontWeight = FontWeight.Normal,
@@ -276,7 +298,7 @@ fun CreateAccountGetStartedView(chViewModel: ModelData, navController: NavContro
                     colorResource(R.color.waterFull)
                 else
                     Color.Gray
-                )
+            )
         }
 
     }
@@ -301,7 +323,9 @@ fun IconGroupDisplay(language: String, imageRes: Int, label: String) {
             fontFamily = RobotoRegularFonts,
             color = Color(0xFFB0B0B0),
             textAlign = TextAlign.Center,
-            modifier = Modifier.size(width = 110.dp, height = 50.dp).testTag("text_createaccountgetstartedview_$removeSpaces")
+            modifier = Modifier
+                .size(width = 110.dp, height = 50.dp)
+                .testTag("text_createaccountgetstartedview_$removeSpaces")
         )
     }
 }
@@ -309,7 +333,7 @@ fun IconGroupDisplay(language: String, imageRes: Int, label: String) {
 @Composable
 fun CreateAccountMainView(chViewModel: ModelData, navController: NavController) {
     val context = LocalContext.current
-    val scope  = rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
     var showNetworkProgress by rememberSaveable { mutableStateOf(false) }
     var showServerErrorMsg by rememberSaveable { mutableStateOf(false) }
 
@@ -328,7 +352,8 @@ fun CreateAccountMainView(chViewModel: ModelData, navController: NavController) 
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            Text(stringResource(R.string.account_setup),
+            Text(
+                stringResource(R.string.account_setup),
                 modifier = Modifier.testTag("text_createaccountmaintitleview_accountsetup"),
                 textAlign = TextAlign.Center,
                 fontFamily = OswaldFonts,
@@ -347,7 +372,10 @@ fun CreateAccountMainView(chViewModel: ModelData, navController: NavController) 
                 painterResource(R.drawable.progress_bar_4_5),
                 contentDescription = "image_createaccountmainview_progress_1",
                 contentScale = ContentScale.FillBounds,
-                modifier = Modifier.padding(bottom = 20.dp).testTag("image_createaccountmainview_progress_1"))
+                modifier = Modifier
+                    .padding(bottom = 20.dp)
+                    .testTag("image_createaccountmainview_progress_1")
+            )
 
             Column(
                 modifier = Modifier
@@ -356,9 +384,11 @@ fun CreateAccountMainView(chViewModel: ModelData, navController: NavController) 
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                Text(stringResource(R.string.find_enterrpise_id),
+                Text(
+                    stringResource(R.string.find_enterrpise_id),
                     modifier = Modifier
-                        .padding(start = 10.dp, end = 10.dp, bottom = 20.dp).testTag("text_createaccountmainview_find"),
+                        .padding(start = 10.dp, end = 10.dp, bottom = 20.dp)
+                        .testTag("text_createaccountmainview_find"),
                     fontFamily = RobotoRegularFonts,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Normal,
@@ -369,7 +399,10 @@ fun CreateAccountMainView(chViewModel: ModelData, navController: NavController) 
                 Image(
                     painterResource(R.drawable.getstarted_enterprise),
                     contentDescription = "image_createaccountmainview_getstarted",
-                    modifier = Modifier.size(200.dp, 200.dp).testTag("image_createaccountmainview_getstarted"))
+                    modifier = Modifier
+                        .size(200.dp, 200.dp)
+                        .testTag("image_createaccountmainview_getstarted")
+                )
 
                 var buttonWidth = 180.dp
                 var fontSize = 18.sp
@@ -378,7 +411,8 @@ fun CreateAccountMainView(chViewModel: ModelData, navController: NavController) 
                     fontSize = 14.sp
                 }
 
-                Button(onClick = trackClick(targetName = "Open SharedScreens.ScanEnterpriseQRCode") {
+                Button(
+                    onClick = trackClick(targetName = "Open SharedScreens.ScanEnterpriseQRCode") {
                         if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
                             navController.navigate(SharedScreens.ScanEnterpriseQRCode.route!!)
                         }
@@ -388,7 +422,8 @@ fun CreateAccountMainView(chViewModel: ModelData, navController: NavController) 
                         .padding(bottom = 5.dp, top = 5.dp)
                         .testTag("button_createaccountmainview_qrcode"),
                     colors = ButtonDefaults.textButtonColors(
-                        backgroundColor = Color.White),
+                        backgroundColor = Color.White
+                    ),
                     shape = RoundedCornerShape(10.dp)
                 ) {
                     Row(
@@ -396,18 +431,22 @@ fun CreateAccountMainView(chViewModel: ModelData, navController: NavController) 
                     ) {
                         Text(
                             stringResource(R.string.scan_qr_code),
-                            modifier = Modifier.align(Alignment.CenterVertically).testTag("text_createaccountmainview_qrcode"),
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                                .testTag("text_createaccountmainview_qrcode"),
                             textAlign = TextAlign.Center,
                             fontFamily = OswaldFonts,
                             fontSize = fontSize,
                             fontWeight = FontWeight.Normal,
-                            color = colorResource(R.color.onboardingLtBlueColor))
+                            color = colorResource(R.color.onboardingLtBlueColor)
+                        )
 
                         Image(
                             imageVector = ImageVector.vectorResource(id = R.drawable.baseline_qr_code_scanner_24),
                             contentDescription = "image_createaccountmainview_qrcode",
                             modifier = Modifier.testTag("image_createaccountmainview_qrcode"),
-                            colorFilter = ColorFilter.tint(colorResource(R.color.onboardingLtBlueColor)))
+                            colorFilter = ColorFilter.tint(colorResource(R.color.onboardingLtBlueColor))
+                        )
                     }
                 }
 
@@ -428,14 +467,20 @@ fun CreateAccountMainView(chViewModel: ModelData, navController: NavController) 
                         .width(180.dp)
                         .testTag("textfield_createaccountmainview_enterprise"),
                     singleLine = true,
-                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center, fontFamily = RobotoMediumFonts, fontSize = 22.sp),
+                    textStyle = LocalTextStyle.current.copy(
+                        textAlign = TextAlign.Center,
+                        fontFamily = RobotoMediumFonts,
+                        fontSize = 22.sp
+                    ),
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.Characters,
-                        keyboardType = KeyboardType.Text),
+                        keyboardType = KeyboardType.Text
+                    ),
                     shape = RoundedCornerShape(10.dp),
                     value = chViewModel.onboardingEnterpriseId.value,
                     onValueChange = {
-                        chViewModel.onboardingEnterpriseId.value = it },
+                        chViewModel.onboardingEnterpriseId.value = it
+                    },
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = colorResource(R.color.settingsColorCoalText),
                         disabledTextColor = Color.Transparent,
@@ -473,94 +518,106 @@ fun CreateAccountMainView(chViewModel: ModelData, navController: NavController) 
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Bottom
                 ) {
-                    Button(onClick = trackClick(targetName = "Calling updateEnterpriseId") {
+                    Button(
+                        onClick = trackClick(targetName = "Calling updateEnterpriseId") {
                             showServerErrorMsg = false
-                            chViewModel.onboardingEnterpriseId.value = chViewModel.onboardingEnterpriseId.value.trimEnd(' ')
+                            chViewModel.onboardingEnterpriseId.value =
+                                chViewModel.onboardingEnterpriseId.value.trimEnd(' ')
 
                             if (chViewModel.enterpriseId.value.isEmpty()) {
-                                chViewModel.enterpriseId.value = chViewModel.onboardingEnterpriseId.value
+                                chViewModel.enterpriseId.value =
+                                    chViewModel.onboardingEnterpriseId.value
                             }
 
-                        if (chViewModel.onboardingEnterpriseId.value == "DEMO-DEMO") {
-                            chViewModel.usersEmailAddress.value = "demo@demo.com"
-                            chViewModel.onboardingEnterpriseName.value = "Demo"
-                            chViewModel.jwtEnterpriseID.value = "DEMO"
-                            chViewModel.jwtSiteID.value = "DEMO"
-                            chViewModel.enterpriseId.value = "DEMO-DEMO"
-                            chViewModel.currentAuthUserId.value = "9911ff32-957c-4f39-a754-e381ad7c3a2c"
-                            chViewModel.CH_UserRole.value = "CH_USER"
+                            if (chViewModel.onboardingEnterpriseId.value == "DEMO-DEMO") {
+                                chViewModel.usersEmailAddress.value = "demo@demo.com"
+                                chViewModel.onboardingEnterpriseName.value = "Demo"
+                                chViewModel.jwtEnterpriseID.value = "DEMO"
+                                chViewModel.jwtSiteID.value = "DEMO"
+                                chViewModel.enterpriseId.value = "DEMO-DEMO"
+                                chViewModel.currentAuthUserId.value =
+                                    "9911ff32-957c-4f39-a754-e381ad7c3a2c"
+                                chViewModel.CH_UserRole.value = "CH_USER"
 
-                            chViewModel.isDemoOnboardingFlow.value = true
-                            chViewModel.updateDemoDemoMode(true)
+                                chViewModel.isDemoOnboardingFlow.value = true
+                                chViewModel.updateDemoDemoMode(true)
 
-                            chViewModel.switchShareAnonymousDataEpicore = false
+                                chViewModel.switchShareAnonymousDataEpicore = false
 
-                            chViewModel.onboardingStep = 2
-                            navController.navigate(OnboardingScreens.StartOnboardingView.route)
-                            return@trackClick
-                        }
-
-                        if (chViewModel.onboardingEnterpriseId.value == "STAG-PROD") {
-                            chViewModel.serverSettings.value = 0
-                            chViewModel.onboardingStep = 1
-                            chViewModel.resetModelDataMutables()
-                            chViewModel.updateServerSettings(chViewModel.serverSettings.value)
-                            navController.navigate(OnboardingScreens.StartOnboardingView.route)
-                            return@trackClick
-                        }
-
-                        if (chViewModel.onboardingEnterpriseId.value == "PROD-STAG") {
-                            chViewModel.serverSettings.value = 1
-                            chViewModel.onboardingStep = 1
-                            chViewModel.updateOnBoardingComplete(false)
-                            chViewModel.updateServerSettings(chViewModel.serverSettings.value)
-                            navController.navigate(OnboardingScreens.StartOnboardingView.route)
-                            return@trackClick
-                        }
-
-                        if (isValidEnterpriseCode(chViewModel.onboardingEnterpriseId.value)) {
-
-                            showNetworkProgress = true
-
-                            chViewModel.isDemoOnboardingFlow.value = false
-                            chViewModel.updateDemoDemoMode(false)
-
-                            //chViewModel.CH_EnterpriseName.value = ""
-                            //chViewModel.CH_SiteName.value = ""
-                            //chViewModel.onboardingEnterpriseName.value = ""
-                            //chViewModel.onboardingSiteName.value = ""
-
-                            scope.launch {
-
-                                val enterpriseInfo = chViewModel.networkManager.getEnterpriseName(chViewModel.onboardingEnterpriseId.value)
-
-                                if (enterpriseInfo.error != null) {
-                                    showServerErrorMsg = true
-                                    serverErrorMsg = enterpriseInfo.error
-                                }
-                                else {
-                                    chViewModel.onboardingEnterpriseName.value = enterpriseInfo.enterpriseName.toString()
-                                    chViewModel.onboardingSiteName.value = enterpriseInfo.siteName.toString()
-                                    chViewModel.enterpriseId.value = chViewModel.onboardingEnterpriseId.value
-                                    navController.navigate(OnboardingScreens.CreateAccountConfirmEnterprise.route)
-                                }
-                                showNetworkProgress = false
+                                chViewModel.onboardingStep = 2
+                                navController.navigate(OnboardingScreens.StartOnboardingView.route)
+                                return@trackClick
                             }
-                        }
-                        else {
-                            showServerErrorMsg = true
-                            serverErrorMsg = context.resources.getString(R.string.enterpise_id_is_wrong_format)
-                        } },
+
+                            if (chViewModel.onboardingEnterpriseId.value == "STAG-PROD") {
+                                chViewModel.serverSettings.value = 0
+                                chViewModel.onboardingStep = 1
+                                chViewModel.resetModelDataMutables()
+                                chViewModel.updateServerSettings(chViewModel.serverSettings.value)
+                                navController.navigate(OnboardingScreens.StartOnboardingView.route)
+                                return@trackClick
+                            }
+
+                            if (chViewModel.onboardingEnterpriseId.value == "PROD-STAG") {
+                                chViewModel.serverSettings.value = 1
+                                chViewModel.onboardingStep = 1
+                                chViewModel.updateOnBoardingComplete(false)
+                                chViewModel.updateServerSettings(chViewModel.serverSettings.value)
+                                navController.navigate(OnboardingScreens.StartOnboardingView.route)
+                                return@trackClick
+                            }
+
+                            if (isValidEnterpriseCode(chViewModel.onboardingEnterpriseId.value)) {
+
+                                showNetworkProgress = true
+
+                                chViewModel.isDemoOnboardingFlow.value = false
+                                chViewModel.updateDemoDemoMode(false)
+
+                                //chViewModel.CH_EnterpriseName.value = ""
+                                //chViewModel.CH_SiteName.value = ""
+                                //chViewModel.onboardingEnterpriseName.value = ""
+                                //chViewModel.onboardingSiteName.value = ""
+
+                                scope.launch {
+
+                                    val enterpriseInfo =
+                                        chViewModel.networkManager.getEnterpriseName(chViewModel.onboardingEnterpriseId.value)
+
+                                    if (enterpriseInfo.error != null) {
+                                        showServerErrorMsg = true
+                                        serverErrorMsg = enterpriseInfo.error
+                                    } else {
+                                        chViewModel.onboardingEnterpriseName.value =
+                                            enterpriseInfo.enterpriseName.toString()
+                                        chViewModel.onboardingSiteName.value =
+                                            enterpriseInfo.siteName.toString()
+                                        chViewModel.enterpriseId.value =
+                                            chViewModel.onboardingEnterpriseId.value
+                                        navController.navigate(OnboardingScreens.CreateAccountConfirmEnterprise.route)
+                                    }
+                                    showNetworkProgress = false
+                                }
+                            } else {
+                                showServerErrorMsg = true
+                                serverErrorMsg =
+                                    context.resources.getString(R.string.enterpise_id_is_wrong_format)
+                            }
+                        },
                         modifier = Modifier
-                            .size(width = 180.dp, height = 60.dp).testTag("button_createaccountmainview_submit"),
+                            .size(width = 180.dp, height = 60.dp)
+                            .testTag("button_createaccountmainview_submit"),
                         enabled = chViewModel.onboardingEnterpriseId.value.isNotEmpty(),
                         shape = RoundedCornerShape(10.dp),
                         colors = ButtonDefaults.textButtonColors(
                             backgroundColor = Color.White
-                        )) {
+                        )
+                    ) {
                         Text(
                             stringResource(R.string.submit),
-                            modifier = Modifier.align(Alignment.CenterVertically).testTag("text_createaccountmainview_submit"),
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                                .testTag("text_createaccountmainview_submit"),
                             textAlign = TextAlign.Center,
                             fontFamily = OswaldFonts,
                             fontSize = 18.sp,
@@ -623,14 +680,19 @@ fun CreateAccountConfirmEnterprise(chViewModel: ModelData, navController: NavCon
                 painterResource(R.drawable.progress_bar_4_4),
                 contentDescription = "image_createaccountconfirmenterprise_progress_2",
                 contentScale = ContentScale.FillBounds,
-                modifier = Modifier.padding(bottom = 20.dp).testTag("image_createaccountconfirmenterprise_progress_2")
+                modifier = Modifier
+                    .padding(bottom = 20.dp)
+                    .testTag("image_createaccountconfirmenterprise_progress_2")
             )
         }
 
         Spacer(Modifier.height(24.dp))
 
-        Text(stringResource(R.string.confirm_job_site),
-            modifier = Modifier.padding(start = 20.dp, end = 20.dp).testTag("text_createaccountconfirmenterprise_confirm"),
+        Text(
+            stringResource(R.string.confirm_job_site),
+            modifier = Modifier
+                .padding(start = 20.dp, end = 20.dp)
+                .testTag("text_createaccountconfirmenterprise_confirm"),
             fontFamily = RobotoRegularFonts,
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
@@ -658,26 +720,32 @@ fun CreateAccountConfirmEnterprise(chViewModel: ModelData, navController: NavCon
                 fontSize = 32.sp,
                 color = colorResource(R.color.waterFull),
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth().testTag("text_createaccountconfirmenterprise_enterprisename")
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("text_createaccountconfirmenterprise_enterprisename")
             )
 
             if (chViewModel.onboardingSiteName.value.isEmpty()) {
-                Text("${chViewModel.jwtEnterpriseID.value}-${chViewModel.jwtSiteID.value}",
+                Text(
+                    "${chViewModel.jwtEnterpriseID.value}-${chViewModel.jwtSiteID.value}",
                     fontFamily = OswaldFonts,
                     fontSize = 28.sp,
                     color = colorResource(R.color.waterFull),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().testTag("text_createaccountconfirmenterprise_enterprisesite")
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("text_createaccountconfirmenterprise_enterprisesite")
                 )
-            }
-            else {
+            } else {
                 Text(
                     text = chViewModel.onboardingSiteName.value,
                     fontFamily = OswaldFonts,
                     fontSize = 28.sp,
                     color = colorResource(R.color.waterFull),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().testTag("text_createaccountconfirmenterprise_sitename")
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("text_createaccountconfirmenterprise_sitename")
                 )
             }
         }
@@ -698,12 +766,14 @@ fun CreateAccountConfirmEnterprise(chViewModel: ModelData, navController: NavCon
                 },
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
-                    .size(width = 180.dp, height = 50.dp).testTag("button_createaccountconfirmenterprise_confirm"),
+                    .size(width = 180.dp, height = 50.dp)
+                    .testTag("button_createaccountconfirmenterprise_confirm"),
                 colors = ButtonDefaults.textButtonColors(
                     backgroundColor = Color.White
                 )
             ) {
-                Text(stringResource(R.string.confirm),
+                Text(
+                    stringResource(R.string.confirm),
                     modifier = Modifier.testTag("text_createaccountconfirmenterprise_confirm"),
                     fontFamily = OswaldFonts,
                     fontSize = 18.sp,
@@ -740,7 +810,8 @@ fun CreateAccountConfirmEnterprise(chViewModel: ModelData, navController: NavCon
                     disabledElevation = 0.dp
                 )
             ) {
-                Text(stringResource(R.string.site_incorrect),
+                Text(
+                    stringResource(R.string.site_incorrect),
                     modifier = Modifier.testTag("text_createaccountconfirmenterprise_incorrect"),
                     fontFamily = RobotoRegularFonts,
                     fontSize = 16.sp,
@@ -758,7 +829,7 @@ fun CreateAccountConfirmEnterprise(chViewModel: ModelData, navController: NavCon
 @Composable
 fun CreateAccountEnterEmailAddress(chViewModel: ModelData, navController: NavController) {
     val signInEmailPlaceholder = "example@mycompany.com"
-    val scope  = rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
     val connection by connectivityState()
     var showNetworkProgress by rememberSaveable { mutableStateOf(false) }
     var showServerErrorMsg by rememberSaveable { mutableStateOf(false) }
@@ -849,16 +920,21 @@ fun CreateAccountEnterEmailAddress(chViewModel: ModelData, navController: NavCon
                     fontSize = 32.sp,
                     color = colorResource(R.color.waterFull),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().testTag("text_createaccountenteremailaddress_enterprisename")
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("text_createaccountenteremailaddress_enterprisename")
                 )
 
                 if (chViewModel.onboardingSiteName.value.isEmpty()) {
-                    Text("${chViewModel.jwtEnterpriseID.value}-${chViewModel.jwtSiteID.value}",
+                    Text(
+                        "${chViewModel.jwtEnterpriseID.value}-${chViewModel.jwtSiteID.value}",
                         fontFamily = OswaldFonts,
                         fontSize = 28.sp,
                         color = colorResource(R.color.waterFull),
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth().testTag("text_createaccountenteremailaddress_sitecode")
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("text_createaccountenteremailaddress_sitecode")
                     )
                 } else {
                     Text(
@@ -867,7 +943,9 @@ fun CreateAccountEnterEmailAddress(chViewModel: ModelData, navController: NavCon
                         fontSize = 28.sp,
                         color = colorResource(R.color.waterFull),
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth().testTag("text_createaccountenteremailaddress_sitename")
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("text_createaccountenteremailaddress_sitename")
                     )
                 }
             }
@@ -962,11 +1040,13 @@ fun CreateAccountEnterEmailAddress(chViewModel: ModelData, navController: NavCon
 
                                 // QA automation testing
                                 if (BuildConfig.QA_TESTING) {
-                                    chViewModel.usersEmailAddress.value = onboardingUsersEmailAddress.value
+                                    chViewModel.usersEmailAddress.value =
+                                        onboardingUsersEmailAddress.value
                                     navController.navigate(OnboardingScreens.CreateAccountCheckEmailView.route)
                                     return@trackClick
                                 }
-                                chViewModel.usersEmailAddress.value = onboardingUsersEmailAddress.value
+                                chViewModel.usersEmailAddress.value =
+                                    onboardingUsersEmailAddress.value
                                 chViewModel.updateIsCreateAccountFlow(true)
                                 showNetworkProgress = true
                                 showServerErrorMsg = false
@@ -991,7 +1071,8 @@ fun CreateAccountEnterEmailAddress(chViewModel: ModelData, navController: NavCon
                                         chViewModel.currentAuthUserId.value.isNotEmpty() && chViewModel.currentAuthUserRole.value.isNotEmpty() && chViewModel.networkManager.isTokenValid()
                                     ) {
 
-                                        chViewModel.enterpriseId.value = chViewModel.jwtEnterpriseID.value + "-" +  chViewModel.jwtSiteID.value
+                                        chViewModel.enterpriseId.value =
+                                            chViewModel.jwtEnterpriseID.value + "-" + chViewModel.jwtSiteID.value
                                         chViewModel.updateEmailAddress(chViewModel.usersEmailAddress.value)
 
                                         chViewModel.userExists = true
@@ -1002,8 +1083,7 @@ fun CreateAccountEnterEmailAddress(chViewModel: ModelData, navController: NavCon
                                             chViewModel.networkManager.getNewRefreshToken()
                                             if (chViewModel.onboardingEnterpriseId.value != chViewModel.enterpriseId.value) {
                                                 navController.navigate(OnboardingScreens.CreateAccountChooseCurrentEnterprise.route)
-                                            }
-                                            else {
+                                            } else {
                                                 navController.navigate(OnboardingScreens.CreateAccountUserExistsScreen.route)
                                             }
                                         }
@@ -1017,7 +1097,8 @@ fun CreateAccountEnterEmailAddress(chViewModel: ModelData, navController: NavCon
                                                 showServerErrorMsg = true
                                                 serverErrorMsg.value = loginContext.error
                                             } else {
-                                                chViewModel.userExists = loginContext.userStatus == "exists"
+                                                chViewModel.userExists =
+                                                    loginContext.userStatus == "exists"
 
                                                 val sendCode = chViewModel.networkManager.sendCode(
                                                     chViewModel.usersEmailAddress.value,
@@ -1056,7 +1137,9 @@ fun CreateAccountEnterEmailAddress(chViewModel: ModelData, navController: NavCon
                     ) {
                         Text(
                             stringResource(R.string.continue_button),
-                            modifier = Modifier.align(Alignment.CenterVertically).testTag("text_createaccountenteremailaddress_continue"),
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                                .testTag("text_createaccountenteremailaddress_continue"),
                             textAlign = TextAlign.Center,
                             fontFamily = OswaldFonts,
                             fontSize = 18.sp,
@@ -1090,7 +1173,8 @@ fun CreateAccountCheckEmailView(chViewModel: ModelData, navController: NavContro
 
                 Spacer(modifier = Modifier.height(30.dp))
 
-                Text(stringResource(R.string.account_setup),
+                Text(
+                    stringResource(R.string.account_setup),
                     modifier = Modifier.testTag("text_createaccountmaintitleview_accountsetup"),
                     textAlign = TextAlign.Center,
                     fontFamily = OswaldFonts,
@@ -1121,16 +1205,19 @@ fun CreateAccountCheckEmailView(chViewModel: ModelData, navController: NavContro
                         Text(
                             stringResource(R.string.check_your_email_inbox),
                             modifier = Modifier
-                                .padding(top = 20.dp, start = 20.dp, bottom = 40.dp, end = 20.dp).testTag("text_createaccountcheckemailview_inbox"),
+                                .padding(top = 20.dp, start = 20.dp, bottom = 40.dp, end = 20.dp)
+                                .testTag("text_createaccountcheckemailview_inbox"),
                             fontFamily = RobotoMediumFonts,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Normal,
                             color = Color.White
                         )
 
-                        Text(stringResource(R.string.complete_login_passcode),
+                        Text(
+                            stringResource(R.string.complete_login_passcode),
                             modifier = Modifier
-                                .padding(start = 20.dp, bottom = 20.dp, end = 20.dp).testTag("text_createaccountcheckemailview_complete"),
+                                .padding(start = 20.dp, bottom = 20.dp, end = 20.dp)
+                                .testTag("text_createaccountcheckemailview_complete"),
                             fontFamily = RobotoRegularFonts,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal,
@@ -1141,7 +1228,8 @@ fun CreateAccountCheckEmailView(chViewModel: ModelData, navController: NavContro
                             chViewModel.usersEmailAddress.value,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 3.dp, start = 20.dp, end = 20.dp, bottom = 3.dp).testTag("text_createaccountcheckemailview_emailaddress"),
+                                .padding(top = 3.dp, start = 20.dp, end = 20.dp, bottom = 3.dp)
+                                .testTag("text_createaccountcheckemailview_emailaddress"),
                             fontFamily = RobotoRegularFonts,
                             fontSize = 20.sp,
                             textAlign = TextAlign.Center,
@@ -1156,7 +1244,10 @@ fun CreateAccountCheckEmailView(chViewModel: ModelData, navController: NavContro
                                 .fillMaxSize()
                                 .padding(bottom = if ((chViewModel.getCurrentLocale() == "ja_JP") || (heightModifier < 700.dp)) 0.dp else 20.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(if ((chViewModel.getCurrentLocale() == "ja_JP") || (heightModifier < 700.dp)) (-10).dp else 0.dp, Alignment.Bottom)
+                            verticalArrangement = Arrangement.spacedBy(
+                                if ((chViewModel.getCurrentLocale() == "ja_JP") || (heightModifier < 700.dp)) (-10).dp else 0.dp,
+                                Alignment.Bottom
+                            )
                         ) {
 
                             var fontSize = 16.sp
@@ -1238,8 +1329,12 @@ fun CreateAccountCheckEmailView(chViewModel: ModelData, navController: NavContro
 }
 
 @Composable
-fun CreateAccountEnterCodeView(chViewModel: ModelData, navController: NavController, emailCode: String?) {
-    val scope  = rememberCoroutineScope()
+fun CreateAccountEnterCodeView(
+    chViewModel: ModelData,
+    navController: NavController,
+    emailCode: String?
+) {
+    val scope = rememberCoroutineScope()
     var showNetworkProgress by rememberSaveable { mutableStateOf(false) }
     val verificationCode = remember { mutableStateOf("") }
     val context = LocalContext.current
@@ -1260,7 +1355,8 @@ fun CreateAccountEnterCodeView(chViewModel: ModelData, navController: NavControl
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            Text(stringResource(R.string.account_setup),
+            Text(
+                stringResource(R.string.account_setup),
                 modifier = Modifier.testTag("text_createaccountmaintitleview_accountsetup"),
                 textAlign = TextAlign.Center,
                 fontFamily = OswaldFonts,
@@ -1301,13 +1397,19 @@ fun CreateAccountEnterCodeView(chViewModel: ModelData, navController: NavControl
                         .width(180.dp)
                         .testTag("textfield_createaccountentercodeview_code"),
                     singleLine = true,
-                    textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center, fontFamily = RobotoMediumFonts, fontSize = 22.sp),
+                    textStyle = LocalTextStyle.current.copy(
+                        textAlign = TextAlign.Center,
+                        fontFamily = RobotoMediumFonts,
+                        fontSize = 22.sp
+                    ),
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.NumberPassword),
+                        keyboardType = KeyboardType.NumberPassword
+                    ),
                     shape = RoundedCornerShape(10.dp),
                     value = verificationCode.value,
                     onValueChange = {
-                        verificationCode.value = it },
+                        verificationCode.value = it
+                    },
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = colorResource(R.color.settingsColorCoalText),
                         disabledTextColor = Color.Transparent,
@@ -1337,82 +1439,82 @@ fun CreateAccountEnterCodeView(chViewModel: ModelData, navController: NavControl
                     }
                 }
 
-                Button(onClick = trackClick(targetName = "calling authenticateWithCode") {
-                    scope.launch {
+                Button(
+                    onClick = trackClick(targetName = "calling authenticateWithCode") {
+                        scope.launch {
 
-                        // QA automation testing
-                        if (BuildConfig.QA_TESTING) {
-                            if (verificationCode.value == "1234") {
-                                chViewModel.onboardingStep = 2
-                                navController.navigate(OnboardingScreens.InitialSetupView.route)
-                                return@launch
-                           }
-                        }
-
-                        // Handle test account here, bypass authentication with code.
-                        if (chViewModel.isTestAccount()) {
-                            if (verificationCode.value == "123456") {
-                                navController.navigate(OnboardingScreens.CreateAccountUserExistsScreen.route)
-                            }
-                            else {
-                                navController.navigate(OnboardingScreens.CreateAccountVerificationFailedView.route)
-                            }
-                        }
-
-                        else {
-                            showNetworkProgress = true
-
-                            if (chViewModel.usersEmailAddress.value.isEmpty()) {
-                                chViewModel.updateCreateAccountUserInfo()
-                                if (chViewModel.usersEmailAddress.value.isEmpty()) {
-                                    showNetworkProgress = false
-                                    serverErrorMsg = "Email address is empty"
+                            // QA automation testing
+                            if (BuildConfig.QA_TESTING) {
+                                if (verificationCode.value == "1234") {
+                                    chViewModel.onboardingStep = 2
+                                    navController.navigate(OnboardingScreens.InitialSetupView.route)
                                     return@launch
                                 }
                             }
 
-                            if (chViewModel.enterpriseId.value.isEmpty()) {
-                                chViewModel.enterpriseId.value = chViewModel.onboardingEnterpriseId.value
-                            }
-
-                            val authReturnCode = chViewModel.networkManager.authenticateWithCode(
-                                chViewModel.usersEmailAddress.value,
-                                verificationCode.value
-                            )
-
-                            if (authReturnCode != null) {
-                                navController.navigate(OnboardingScreens.CreateAccountVerificationFailedView.route)
+                            // Handle test account here, bypass authentication with code.
+                            if (chViewModel.isTestAccount()) {
+                                if (verificationCode.value == "123456") {
+                                    navController.navigate(OnboardingScreens.CreateAccountUserExistsScreen.route)
+                                } else {
+                                    navController.navigate(OnboardingScreens.CreateAccountVerificationFailedView.route)
+                                }
                             } else {
+                                showNetworkProgress = true
 
-                                chViewModel.networkManager.getUserInfo()
+                                if (chViewModel.usersEmailAddress.value.isEmpty()) {
+                                    chViewModel.updateCreateAccountUserInfo()
+                                    if (chViewModel.usersEmailAddress.value.isEmpty()) {
+                                        showNetworkProgress = false
+                                        serverErrorMsg = "Email address is empty"
+                                        return@launch
+                                    }
+                                }
 
-                                //if (chViewModel.onboardingEnterpriseId.value != chViewModel.enterpriseId.value && chViewModel.userExists) {
-                                //    navController.navigate(OnboardingScreens.CreateAccountChooseCurrentEnterprise.route)
-                                //}
-                                //else {
+                                if (chViewModel.enterpriseId.value.isEmpty()) {
+                                    chViewModel.enterpriseId.value =
+                                        chViewModel.onboardingEnterpriseId.value
+                                }
+
+                                val authReturnCode =
+                                    chViewModel.networkManager.authenticateWithCode(
+                                        chViewModel.usersEmailAddress.value,
+                                        verificationCode.value
+                                    )
+
+                                if (authReturnCode != null) {
+                                    navController.navigate(OnboardingScreens.CreateAccountVerificationFailedView.route)
+                                } else {
+
+                                    chViewModel.networkManager.getUserInfo()
+
+                                    //if (chViewModel.onboardingEnterpriseId.value != chViewModel.enterpriseId.value && chViewModel.userExists) {
+                                    //    navController.navigate(OnboardingScreens.CreateAccountChooseCurrentEnterprise.route)
+                                    //}
+                                    //else {
                                     if (chViewModel.userExistsKeystore && chViewModel.userExists) {
                                         navController.navigate(OnboardingScreens.LogInPairModuleView.route)
-                                    }
-                                    else {
+                                    } else {
 
                                         chViewModel.userExistsKeystore = true
 
                                         chViewModel.onboardingStep = 2
                                         navController.navigate(OnboardingScreens.InitialSetupView.route)
                                     }
-                                //}
-                            }
+                                    //}
+                                }
 
-                            showNetworkProgress = false
+                                showNetworkProgress = false
+                            }
                         }
-                    }
-                },
+                    },
                     modifier = Modifier
                         .size(width = 180.dp, height = 60.dp)
                         .padding(bottom = 10.dp)
                         .testTag("button_createaccountentercodeview_submit"),
                     colors = ButtonDefaults.textButtonColors(
-                        backgroundColor = Color.White),
+                        backgroundColor = Color.White
+                    ),
                     shape = RoundedCornerShape(10.dp)
                 ) {
                     Row(
@@ -1420,7 +1522,8 @@ fun CreateAccountEnterCodeView(chViewModel: ModelData, navController: NavControl
                     ) {
                         Text(
                             stringResource(R.string.submit_button),
-                            modifier = Modifier.align(Alignment.CenterVertically)
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
                                 .testTag("text_createaccountentercodeview_submit"),
                             textAlign = TextAlign.Center,
                             fontFamily = OswaldFonts,
@@ -1475,7 +1578,7 @@ fun CreateAccountEnterCodeView(chViewModel: ModelData, navController: NavControl
 @Composable
 fun CreateAccountVerificationFailedView(chViewModel: ModelData, navController: NavController) {
     val context = LocalContext.current
-    val sendCodeScope  = rememberCoroutineScope()
+    val sendCodeScope = rememberCoroutineScope()
 
     Card {
         Column(
@@ -1485,7 +1588,8 @@ fun CreateAccountVerificationFailedView(chViewModel: ModelData, navController: N
                 .background(colorResource(R.color.onboardingVeryDarkBackground)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(stringResource(R.string.account_setup),
+            Text(
+                stringResource(R.string.account_setup),
                 modifier = Modifier.testTag("text_createaccountmaintitleview_accountsetup"),
                 textAlign = TextAlign.Center,
                 fontFamily = OswaldFonts,
@@ -1510,7 +1614,8 @@ fun CreateAccountVerificationFailedView(chViewModel: ModelData, navController: N
                 Text(
                     stringResource(R.string.verification_did_not_succeed),
                     modifier = Modifier
-                        .padding(top = 40.dp, bottom = 20.dp).testTag("text_createaccountverificationfailedview_check"),
+                        .padding(top = 40.dp, bottom = 20.dp)
+                        .testTag("text_createaccountverificationfailedview_check"),
                     fontFamily = RobotoRegularFonts,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Normal,
@@ -1520,22 +1625,25 @@ fun CreateAccountVerificationFailedView(chViewModel: ModelData, navController: N
                 Text(
                     stringResource(R.string.carefully_check_the_verification_code),
                     modifier = Modifier
-                        .padding(top = 20.dp, bottom = 20.dp, start = 20.dp).testTag("text_createaccountverificationfailedview_check"),
+                        .padding(top = 20.dp, bottom = 20.dp, start = 20.dp)
+                        .testTag("text_createaccountverificationfailedview_check"),
                     fontFamily = RobotoRegularFonts,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Normal,
                     color = Color.White
                 )
 
-                Button(onClick = trackClick(targetName = "CreateAccountVerificationFailedView back button pressed") {
-                    navController.navigateUp()
-                },
+                Button(
+                    onClick = trackClick(targetName = "CreateAccountVerificationFailedView back button pressed") {
+                        navController.navigateUp()
+                    },
                     modifier = Modifier
                         .size(width = 280.dp, height = 60.dp)
                         .padding(bottom = 10.dp)
                         .testTag("button_accountcreateverificationfailedview_enter_code"),
                     colors = ButtonDefaults.textButtonColors(
-                        backgroundColor = Color.White),
+                        backgroundColor = Color.White
+                    ),
                     shape = RoundedCornerShape(10.dp)
                 ) {
                     Row(
@@ -1543,7 +1651,8 @@ fun CreateAccountVerificationFailedView(chViewModel: ModelData, navController: N
                     ) {
                         Text(
                             stringResource(R.string.enter_code_manually),
-                            modifier = Modifier.align(Alignment.CenterVertically)
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
                                 .testTag("text_accountcreateverificationfailedview_enter_code"),
                             textAlign = TextAlign.Center,
                             fontFamily = OswaldFonts,
@@ -1565,21 +1674,23 @@ fun CreateAccountVerificationFailedView(chViewModel: ModelData, navController: N
                     color = Color.White
                 )
 
-                Button(onClick = trackClick(targetName = "Calling sendCode") {
-                    sendCodeScope.launch {
-                        chViewModel.networkManager.sendCode(
-                            chViewModel.usersEmailAddress.value,
-                            chViewModel.enterpriseId.value
-                        )
-                    }
-                    navController.navigate(OnboardingScreens.CreateAccountCheckEmailView.route)
-                },
+                Button(
+                    onClick = trackClick(targetName = "Calling sendCode") {
+                        sendCodeScope.launch {
+                            chViewModel.networkManager.sendCode(
+                                chViewModel.usersEmailAddress.value,
+                                chViewModel.enterpriseId.value
+                            )
+                        }
+                        navController.navigate(OnboardingScreens.CreateAccountCheckEmailView.route)
+                    },
                     modifier = Modifier
                         .size(width = 280.dp, height = 60.dp)
                         .padding(bottom = 10.dp)
                         .testTag("button_createaccountverificationfailedview_resend"),
                     colors = ButtonDefaults.textButtonColors(
-                        backgroundColor = Color.White),
+                        backgroundColor = Color.White
+                    ),
                     shape = RoundedCornerShape(10.dp)
                 ) {
                     Row(
@@ -1587,7 +1698,9 @@ fun CreateAccountVerificationFailedView(chViewModel: ModelData, navController: N
                     ) {
                         Text(
                             stringResource(R.string.resend_email),
-                            modifier = Modifier.align(Alignment.CenterVertically).testTag("text_createaccountverificationfailedview_resend"),
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                                .testTag("text_createaccountverificationfailedview_resend"),
                             textAlign = TextAlign.Center,
                             fontFamily = OswaldFonts,
                             fontSize = 18.sp,
@@ -1637,7 +1750,7 @@ fun CreateAccountVerificationFailedView(chViewModel: ModelData, navController: N
 @Composable
 fun CreateAccountUserExistsScreen(chViewModel: ModelData, navController: NavController) {
 
-    val scope  = rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -1682,16 +1795,21 @@ fun CreateAccountUserExistsScreen(chViewModel: ModelData, navController: NavCont
                 fontSize = 28.sp,
                 color = colorResource(R.color.waterFull),
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth().testTag("button_createaccountUserexistsscreen_enterprisename")
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("button_createaccountUserexistsscreen_enterprisename")
             )
 
             if (chViewModel.onboardingSiteName.value.isEmpty()) {
-                Text("${chViewModel.jwtEnterpriseID.value}-${chViewModel.jwtSiteID.value}",
+                Text(
+                    "${chViewModel.jwtEnterpriseID.value}-${chViewModel.jwtSiteID.value}",
                     fontFamily = OswaldFonts,
                     fontSize = 24.sp,
                     color = colorResource(R.color.waterFull),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().testTag("button_createaccountUserexistsscreen_jwt")
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("button_createaccountUserexistsscreen_jwt")
                 )
             } else {
                 Text(
@@ -1700,18 +1818,23 @@ fun CreateAccountUserExistsScreen(chViewModel: ModelData, navController: NavCont
                     fontSize = 24.sp,
                     color = colorResource(R.color.waterFull),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().testTag("button_createaccountUserexistsscreen_sitenname")
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("button_createaccountUserexistsscreen_sitenname")
                 )
             }
         }
 
         Spacer(Modifier.height(10.dp))
 
-        Text(stringResource(R.string.choose_skip_onboarding),
+        Text(
+            stringResource(R.string.choose_skip_onboarding),
             fontFamily = OswaldFonts,
             fontSize = 16.sp,
             color = Color.White,
-            modifier = Modifier.padding(start = 20.dp, end = 20.dp).testTag("button_createaccountUserexistsscreen_choose")
+            modifier = Modifier
+                .padding(start = 20.dp, end = 20.dp)
+                .testTag("button_createaccountUserexistsscreen_choose")
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -1724,22 +1847,14 @@ fun CreateAccountUserExistsScreen(chViewModel: ModelData, navController: NavCont
         ) {
             Button(
                 onClick = trackClick(targetName = "create_account_flow_user_exists_pair_module") {
-                    /*if (chViewModel.userExists) {
+                    chViewModel.continueWithOnboarding = true
+                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
                         scope.launch {
                             chViewModel.networkManager.getUserInfo()
-                            navController.navigate(OnboardingScreens.LogInPairModuleView.route)
+                            chViewModel.onboardingStep = 2
+                            navController.navigate(OnboardingScreens.InitialSetupView.route)
                         }
                     }
-                    else {*/
-                    chViewModel.continueWithOnboarding = true
-                        if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
-                            scope.launch {
-                                chViewModel.networkManager.getUserInfo()
-                                chViewModel.onboardingStep = 2
-                                navController.navigate(OnboardingScreens.InitialSetupView.route)
-                            }
-                        }
-                    //}
                 },
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
@@ -1749,7 +1864,8 @@ fun CreateAccountUserExistsScreen(chViewModel: ModelData, navController: NavCont
                     backgroundColor = Color.White
                 )
             ) {
-                Text(stringResource(R.string.continue_with_onboard),
+                Text(
+                    stringResource(R.string.continue_with_onboard),
                     modifier = Modifier.testTag("text_createaccountUserexistsscreen_continue"),
                     fontFamily = OswaldFonts,
                     fontSize = 18.sp,
@@ -1776,7 +1892,8 @@ fun CreateAccountUserExistsScreen(chViewModel: ModelData, navController: NavCont
                         disabledElevation = 0.dp
                     )
                 ) {
-                    Text(stringResource(R.string.skip_onboarding),
+                    Text(
+                        stringResource(R.string.skip_onboarding),
                         modifier = Modifier.testTag("text_createaccountUserexistsscreen_skip"),
                         fontFamily = RobotoRegularFonts,
                         fontSize = 16.sp,
@@ -1795,7 +1912,7 @@ fun CreateAccountUserExistsScreen(chViewModel: ModelData, navController: NavCont
 @Composable
 fun CreateAccountChooseCurrentEnterprise(chViewModel: ModelData, navController: NavController) {
 
-    val scopeUpdateUser  = rememberCoroutineScope()
+    val scopeUpdateUser = rememberCoroutineScope()
     var isOnboardingEnterpriseChecked by remember { mutableStateOf(true) }
     var isEnterpriseChecked by remember { mutableStateOf(false) }
     var showNetworkProgress by remember { mutableStateOf(false) }
@@ -1809,7 +1926,8 @@ fun CreateAccountChooseCurrentEnterprise(chViewModel: ModelData, navController: 
         ) {
             CreateShowAccountText(showSuccessText = false)
 
-            Text(stringResource(R.string.enterprise_id_change),
+            Text(
+                stringResource(R.string.enterprise_id_change),
                 fontFamily = OswaldFonts,
                 fontSize = 18.sp,
                 color = colorResource(R.color.onboardingEmailColor),
@@ -1955,10 +2073,9 @@ fun CreateAccountChooseCurrentEnterprise(chViewModel: ModelData, navController: 
                                 }
 
                                 navController.navigate(OnboardingScreens.CreateAccountUserExistsScreen.route)
-                            }
-                            else {
+                            } else {
 
-                                if(!chViewModel.onboardingComplete.value) {
+                                if (!chViewModel.onboardingComplete.value) {
                                     val enterpriseInfo =
                                         chViewModel.networkManager.getEnterpriseName(
                                             chViewModel.enterpriseId.value
@@ -1986,7 +2103,8 @@ fun CreateAccountChooseCurrentEnterprise(chViewModel: ModelData, navController: 
                         backgroundColor = Color.White
                     )
                 ) {
-                    Text(stringResource(R.string.hydration_ok),
+                    Text(
+                        stringResource(R.string.hydration_ok),
                         modifier = Modifier.testTag("text_createaccountchoosecurrententerprise_ok"),
                         fontFamily = OswaldFonts,
                         fontSize = 18.sp,
@@ -2027,7 +2145,8 @@ fun CreateShowAccountText(showSuccessText: Boolean) {
         )
 
         if (showSuccessText) {
-            Text(stringResource(R.string.login_successful),
+            Text(
+                stringResource(R.string.login_successful),
                 fontFamily = RobotoRegularFonts,
                 fontSize = 18.sp,
                 color = Color.White,
