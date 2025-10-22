@@ -390,6 +390,7 @@ fun DataSharingSettingsView(chViewModel: ModelData, width: Dp, showHeading: Bool
 
                 if (chViewModel.isDemoOnboardingFlow.value) {
                     Switch(
+                        modifier = Modifier.testTag("toggle_datasharingsettingsview_epicore"),
                         checked = false,
                         onCheckedChange = {
                         },

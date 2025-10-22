@@ -9,6 +9,7 @@ plugins {
 }
 
 // Provide a default value if the property is not specified.
+// This is used for automated testing builds. This is set in github action workflow
 val qaTestingBuild: Boolean = findProperty("QA_TESTING") != null
 
 android {
@@ -19,7 +20,7 @@ android {
         applicationId = "com.epicorebiosystems.rehydrate"
         minSdk = 29
         targetSdk = 36
-        versionCode = 37
+        versionCode = 38
         versionName = "3.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -31,14 +32,14 @@ android {
     buildTypes {
         debug {
             buildConfigField("String","VERSION_NAME", "\"3.2.0 (Debug)\"")
-            buildConfigField("String","VERSION_CODE", "\"Build 6\"")
+            buildConfigField("String","VERSION_CODE", "\"Build 8\"")
             // *** NOTE(tsd): WHEN DOING QA BUILDS FOR AUTOMATED TESTING CHANGE THIS TO 'true' ***
             buildConfigField("Boolean","QA_TESTING", "$qaTestingBuild")
             isMinifyEnabled = false
         }
         release {
             buildConfigField("String","VERSION_NAME", "\"3.2.0\"")
-            buildConfigField("String","VERSION_CODE", "\"Build 6\"")
+            buildConfigField("String","VERSION_CODE", "\"Build 8\"")
             // *** NOTE(tsd): THIS SHOULD ALWAYS BE 'FALSE' FOR RELEASE BUILDS ***
             buildConfigField("Boolean","QA_TESTING", "$qaTestingBuild")
             isShrinkResources = true

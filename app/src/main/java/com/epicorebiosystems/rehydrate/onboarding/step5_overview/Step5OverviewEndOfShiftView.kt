@@ -2,12 +2,14 @@ package com.epicorebiosystems.rehydrate.onboarding.step5_overview
 
 import android.content.res.Resources
 import android.os.Build
+import android.util.DisplayMetrics.DENSITY_XHIGH
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -166,8 +168,10 @@ fun Step5OverviewEndOfShift(ebsMonitor: EBSDeviceMonitor) {
         Image(
             painterResource(R.drawable.overview_sync),
             contentDescription = "image_overviewshareinfo4view_synced",
-            modifier = Modifier.testTag("image_overviewshareinfo4view_synced"),
             contentScale = ContentScale.Fit,
+            modifier = Modifier.fillMaxWidth(if (Resources.getSystem().displayMetrics.densityDpi > DENSITY_XHIGH) 1.0f else 0.8f)
+                .aspectRatio(1f)
+                .testTag("image_overviewshareinfo4view_synced")
         )
 
     }
@@ -180,16 +184,20 @@ fun Step5OverviewEndOfShift(ebsMonitor: EBSDeviceMonitor) {
             Image(
                 painterResource(R.drawable.overview_2_arm),
                 contentDescription = "image_overviewshareinfo4view_armband",
-                modifier = Modifier.testTag("image_overviewshareinfo4view_armband"),
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.fillMaxWidth(if (Resources.getSystem().displayMetrics.densityDpi > DENSITY_XHIGH) 0.4f else 0.3f)
+                    .aspectRatio(1f)
+                    .testTag("image_overviewshareinfo4view_armband")
             )
         }
         else {
             Image(
                 painterResource(R.drawable.overview_2),
                 contentDescription = "image_overviewshareinfo4view_patch",
-                modifier = Modifier.testTag("image_overviewshareinfo4view_patch"),
                 contentScale = ContentScale.Fit,
+                modifier = Modifier.fillMaxWidth(if (Resources.getSystem().displayMetrics.densityDpi > DENSITY_XHIGH) 0.4f else 0.3f)
+                    .aspectRatio(1f)
+                    .testTag("image_overviewshareinfo4view_patch")
             )
         }
 
@@ -223,8 +231,10 @@ fun Step5OverviewEndOfShift(ebsMonitor: EBSDeviceMonitor) {
             Image(
                 painterResource(R.drawable.overview_detach_arm),
                 contentDescription = "image_overviewshareinfo4view_armband_remove",
-                modifier = Modifier.testTag("image_overviewshareinfo4view_armband_remove"),
                 contentScale = ContentScale.Fit,
+                modifier = Modifier.fillMaxWidth(if (Resources.getSystem().displayMetrics.densityDpi > DENSITY_XHIGH) 1.0f else 0.8f)
+                    .aspectRatio(1f)
+                    .testTag("image_overviewshareinfo4view_armband_remove")
             )
         }
         else {
@@ -241,8 +251,10 @@ fun Step5OverviewEndOfShift(ebsMonitor: EBSDeviceMonitor) {
             Image(
                 painterResource(R.drawable.overview_4),
                 contentDescription = "image_overviewshareinfo4view_patch_peel",
-                modifier = Modifier.testTag("image_overviewshareinfo4view_patch_peel"),
                 contentScale = ContentScale.Fit,
+                modifier = Modifier.fillMaxWidth(if (Resources.getSystem().displayMetrics.densityDpi > DENSITY_XHIGH) 1.0f else 0.8f)
+                    .aspectRatio(1f)
+                    .testTag("image_overviewshareinfo4view_patch_peel")
             )
         }
 

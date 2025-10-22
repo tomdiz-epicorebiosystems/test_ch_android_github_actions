@@ -72,6 +72,7 @@ import com.epicorebiosystems.rehydrate.modelData.isValidEnterpriseCode
 import com.epicorebiosystems.rehydrate.modelData.validateEmail
 import com.epicorebiosystems.rehydrate.networkManager.ConnectionState
 import com.epicorebiosystems.rehydrate.networkManager.connectivityState
+import com.epicorebiosystems.rehydrate.nordicsemi.uart.view.DisconnectEvent
 import com.epicorebiosystems.rehydrate.sharedViews.FullScreenProgressView
 import com.epicorebiosystems.rehydrate.ui.theme.OswaldFonts
 import com.epicorebiosystems.rehydrate.ui.theme.RobotoMediumFonts
@@ -489,7 +490,25 @@ fun CreateAccountMainView(chViewModel: ModelData, navController: NavController) 
                             chViewModel.switchShareAnonymousDataEpicore = false
 
                             chViewModel.onboardingStep = 2
-                            navController.navigate(OnboardingScreens.InitialSetupView.route)
+                            navController.navigate(OnboardingScreens.StartOnboardingView.route)
+                            return@trackClick
+                        }
+
+                        if (chViewModel.onboardingEnterpriseId.value == "STAG-PROD") {
+                            chViewModel.serverSettings.value = 0
+                            chViewModel.onboardingStep = 1
+                            chViewModel.resetModelDataMutables()
+                            chViewModel.updateServerSettings(chViewModel.serverSettings.value)
+                            navController.navigate(OnboardingScreens.StartOnboardingView.route)
+                            return@trackClick
+                        }
+
+                        if (chViewModel.onboardingEnterpriseId.value == "PROD-STAG") {
+                            chViewModel.serverSettings.value = 1
+                            chViewModel.onboardingStep = 1
+                            chViewModel.updateOnBoardingComplete(false)
+                            chViewModel.updateServerSettings(chViewModel.serverSettings.value)
+                            navController.navigate(OnboardingScreens.StartOnboardingView.route)
                             return@trackClick
                         }
 
@@ -967,6 +986,7 @@ fun CreateAccountEnterEmailAddress(chViewModel: ModelData, navController: NavCon
                                     ) {
 
                                         chViewModel.enterpriseId.value = chViewModel.jwtEnterpriseID.value + "-" +  chViewModel.jwtSiteID.value
+                                        chViewModel.updateEmailAddress(chViewModel.usersEmailAddress.value)
 
                                         chViewModel.userExists = true
                                         chViewModel.userExistsKeystore = true
@@ -1706,13 +1726,13 @@ fun CreateAccountUserExistsScreen(chViewModel: ModelData, navController: NavCont
                     }
                     else {*/
                     chViewModel.continueWithOnboarding = true
-                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
-                        scope.launch {
-                            chViewModel.networkManager.getUserInfo()
-                            chViewModel.onboardingStep = 2
-                            navController.navigate(OnboardingScreens.InitialSetupView.route)
+                        if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                            scope.launch {
+                                chViewModel.networkManager.getUserInfo()
+                                chViewModel.onboardingStep = 2
+                                navController.navigate(OnboardingScreens.InitialSetupView.route)
+                            }
                         }
-                    }
                     //}
                 },
                 shape = RoundedCornerShape(10.dp),

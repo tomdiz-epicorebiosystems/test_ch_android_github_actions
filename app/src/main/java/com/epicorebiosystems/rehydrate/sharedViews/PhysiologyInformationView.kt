@@ -253,7 +253,7 @@ fun PhysiologyInformationView(navController: NavController, chViewModel: ModelDa
 
                         Spacer(modifier = Modifier.width(20.dp))
                         NumberPicker(
-                            modifier = Modifier.testTag("picker_physiologyinformationview_heightft"),
+                            modifier = Modifier.testTag("picker_physiologyinformationview_heightft_" + chViewModel.userHeightFt),
                             dividersColor = Color.Gray,
                             textStyle = LocalTextStyle.current.copy(
                                 textAlign = TextAlign.Center,
@@ -297,7 +297,7 @@ fun PhysiologyInformationView(navController: NavController, chViewModel: ModelDa
                         // Part of modifier -> .border(color = colorResource(R.color.settingsColorHydroDarkText), width = 1.dp, shape = RoundedCornerShape(30)),
 
                         NumberPicker(
-                            modifier = Modifier.testTag("picker_physiologyinformationview_heightin"),
+                            modifier = Modifier.testTag("picker_physiologyinformationview_heightin_" + chViewModel.userHeightIn),
                             dividersColor = Color.Gray,
                             textStyle = LocalTextStyle.current.copy(
                                 textAlign = TextAlign.Center,
@@ -682,7 +682,7 @@ fun PhysiologyInformationView(navController: NavController, chViewModel: ModelDa
                         )
                     } else {
                         ListItemPicker(
-                            modifier = Modifier.testTag("picker_physiologyinformationview_gender"),
+                            modifier = Modifier.testTag("picker_physiologyinformationview_gender_" + chViewModel.userGender),
                             dividersColor = Color.Gray,
                             textStyle = LocalTextStyle.current.copy(
                                 textAlign = TextAlign.Center,
@@ -730,7 +730,6 @@ fun PhysiologyInformationView(navController: NavController, chViewModel: ModelDa
                         items = units,
                         fontSize = if (isJapanese) 8.sp else 12.sp,
                         defaultSelectedItemIndex = chViewModel.currentUnits.value,
-                        //modifier = Modifier.padding(start = 5.dp).testTag("picker_physiologyinformationview_metrics"),
                     ) {
                         Log.d("MetricToggle", "Selected item : ${units[it]}")
                         chViewModel.updateUnits(it)

@@ -5,7 +5,7 @@
     <string name="work_day_summary">サマリー</string>
     <string name="week">週</string>
     <string name="your_sweat_profile">現在の発汗状態</string>
-    <string name="insights_light">ライト</string>
+    <string name="insights_light">低い</string>
     <string name="insights_moderate">適度</string>
     <string name="insights_heavy">高い</string>
     <string name="sweat_volume">発汗量</string>
@@ -527,7 +527,6 @@
     <string name="exit">出口</string>
     <string name="smart_phone">スマートフォン</string>
     <string name="internet_conn">インターネット\n接続</string>
-    <string name="epicore_share_settings">設定</string>
     <string name="epicore_share_disabled">設定に移動し、Epicoreとのデータ共有を有効にすると、データを表示できます。</string>
     <string name="insights_string_low_low">発汗量が少なく、ナトリウム濃度も低いため、通常、水分補給の必要量は控えめです。通常の活動中であれば、同世代の人たちほど多くの水分や電解質を補給する必要はないでしょう。ナトリウムの損失は通常食事でカバーできますが、必要に応じて電解質を補給してください。発汗量が少ないとはいえ、1日を通して水分補給をするように気をつけましょう。</string>
     <string name="insights_string_low_medium">たくさん汗をかくわけではなくても、激しい運動をした日には、かなりの量のナトリウムが失われる可能性があります。ナトリウムの損失は通常、食事でカバーできますが、特に活動的な日、特にエネルギーが消耗していると感じ始めたら、電解質の追加補給を検討してください。発汗量が少ないとはいえ、1日を通して水分補給には気をつけましょう。</string>

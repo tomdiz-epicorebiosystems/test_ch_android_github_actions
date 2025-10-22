@@ -2,6 +2,7 @@ package com.epicorebiosystems.rehydrate.tabViews.insightViews
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Resources
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,14 +24,12 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -45,8 +44,6 @@ import com.epicorebiosystems.rehydrate.tabViews.insightViews.SweatChartUtils.get
 import com.epicorebiosystems.rehydrate.tabViews.insightViews.SweatChartUtils.getSodiumConcentrationString
 import com.epicorebiosystems.rehydrate.tabViews.insightViews.SweatChartUtils.getSweatConcentrationColor
 import com.epicorebiosystems.rehydrate.tabViews.insightViews.SweatChartUtils.getSweatConcentrationString
-//import com.epicorebiosystems.rehydrate.tabViews.insightViews.SweatChartUtils.scaleSodiumLowValue
-//import com.epicorebiosystems.rehydrate.tabViews.insightViews.SweatChartUtils.scaleSweatLowValue
 import com.epicorebiosystems.rehydrate.tabViews.todayViews.hexToColor
 import com.epicorebiosystems.rehydrate.ui.theme.OswaldFonts
 import com.epicorebiosystems.rehydrate.ui.theme.RobotoRegularFonts
@@ -137,12 +134,14 @@ fun UserSweatProfileView(chViewModel: ModelData,
         modifier = Modifier.padding(bottom = 5.dp, start = 10.dp, end = 10.dp)
     ) {
         val widthModifier = maxWidth
+        val barWidth = ((maxWidth.value - 24.0) / 3.0).dp
+
         Column (
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            sweatConcentrationState = if (mlConversionToL < 0.6) {
+            sweatConcentrationState = if (mlConversionToL <= 0.6) {
                 SweatConcentrationState.LIGHT
-            } else if (mlConversionToL in 0.6..1.8) {
+            } else if (mlConversionToL <= 1.8) {
                 SweatConcentrationState.MODERATE
             } else {
                 SweatConcentrationState.HEAVY
@@ -150,7 +149,7 @@ fun UserSweatProfileView(chViewModel: ModelData,
 
             sodiumConcentrationState = if (sodiumConcentration <= 24) {
                 SodiumConcentrationState.LOW
-            } else if (sodiumConcentration > 24 && sodiumConcentration < 64) {
+            } else if (sodiumConcentration > 24 && sodiumConcentration <= 64) {
                 SodiumConcentrationState.MEDIUM
             } else {
                 SodiumConcentrationState.HIGH
@@ -183,7 +182,8 @@ fun UserSweatProfileView(chViewModel: ModelData,
                     SweatLossRate(
                         sweatConcentrationState = sweatConcentrationState,
                         sweatConcentration = mlConversionToL,
-                        chartHeight = chartHeight
+                        chartHeight = chartHeight,
+                        barWidth = barWidth
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
@@ -191,7 +191,8 @@ fun UserSweatProfileView(chViewModel: ModelData,
                     SodiumConcentration(
                         sodiumConcentrationState = sodiumConcentrationState,
                         sodiumConcentration = sodiumConcentration,
-                        chartHeight = chartHeight
+                        chartHeight = chartHeight,
+                        barWidth = barWidth
                     )
 
                     Spacer(modifier = Modifier.height(if (phoneScreenDPI > DENSITY_XHIGH) 60.dp else 120.dp))
@@ -271,9 +272,8 @@ fun UserSweatProfileView(chViewModel: ModelData,
 }
 
 @Composable
-fun SweatLossRate(sweatConcentrationState: SweatConcentrationState, sweatConcentration: Double, chartHeight: Dp) {
-    val segmentWidth = 120.dp
-    val clamped = sweatConcentration.coerceIn(0.0, 3.1) / 3.1
+fun SweatLossRate(sweatConcentrationState: SweatConcentrationState, sweatConcentration: Double, chartHeight: Dp, barWidth: Dp) {
+    val scaledSweatLossArrowOffset = scaleSweatLossValue(sweatConcentration, barWidth.value)
 
     Column(
         verticalArrangement = Arrangement.spacedBy(5.dp),
@@ -326,7 +326,7 @@ fun SweatLossRate(sweatConcentrationState: SweatConcentrationState, sweatConcent
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
-                        .width(segmentWidth)
+                        .width(barWidth)
                         .height(chartHeight)
                         .background(color)
                 ) {
@@ -345,15 +345,15 @@ fun SweatLossRate(sweatConcentrationState: SweatConcentrationState, sweatConcent
             painter = painterResource(R.drawable.sweat_profile_arrow),
             contentDescription = null,
             modifier = Modifier
-                .offset(x = 20.dp + (360.dp * clamped.toFloat()), y = 5.dp)
+                .offset(x = (scaledSweatLossArrowOffset).dp, y = 5.dp)
         )
     }
 }
 
 @Composable
-fun SodiumConcentration(sodiumConcentrationState: SodiumConcentrationState, sodiumConcentration: Double, chartHeight: Dp) {
-    val segmentWidth = 120.dp
-    val clamped = sodiumConcentration.coerceIn(0.0, 120.0) * 3.5
+fun SodiumConcentration(sodiumConcentrationState: SodiumConcentrationState, sodiumConcentration: Double, chartHeight: Dp, barWidth: Dp) {
+//    val segmentWidth = 120.dp
+    val scaledSodiumConcentrationArrowOffset = scaleSodiumConcentrationValue(sodiumConcentration, barWidth.value)
 
     Column(
         verticalArrangement = Arrangement.spacedBy(5.dp),
@@ -404,7 +404,7 @@ fun SodiumConcentration(sodiumConcentrationState: SodiumConcentrationState, sodi
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
-                        .width(segmentWidth)
+                        .width(barWidth)
                         .height(chartHeight)
                         .background(color)
                 ) {
@@ -423,7 +423,41 @@ fun SodiumConcentration(sodiumConcentrationState: SodiumConcentrationState, sodi
             painter = painterResource(R.drawable.sweat_profile_arrow),
             contentDescription = null,
             modifier = Modifier
-                .offset(x = 20.dp + clamped.dp, y = 5.dp)
+                .offset(x = scaledSodiumConcentrationArrowOffset.dp, y = 5.dp)
         )
+    }
+}
+
+// 0.0 - 3.0 (3.1 so doesn't go off chart) to a X position for moving arrow under sweat chart
+fun scaleSweatLossValue(sweatConcentration: Double, barWidth: Float) : Double {
+    val clamped = sweatConcentration.coerceIn(0.0, 3.1)
+
+    if (clamped <= 0.6) {
+        return (clamped / 0.65) * barWidth + 2.0
+    }
+
+    else if (clamped <= 1.8 ) {
+        return barWidth + 2.0 + ((clamped - 0.6) / 1.25 * barWidth)
+    }
+
+    else {
+        return 2.0 * barWidth + 4.0 + ((clamped - 1.8) / 1.35 * barWidth)
+    }
+}
+
+// 0.0 - 3.0 (3.1 so doesn't go off chart) to a X position for moving arrow under sweat chart
+fun scaleSodiumConcentrationValue(sweatConcentration: Double, barWidth: Float) : Double {
+    val clamped = sweatConcentration.coerceIn(0.0, 120.0)
+
+    if (clamped <= 24) {
+        return (clamped / 26) * barWidth + 2.0
+    }
+
+    else if (clamped <= 64 ) {
+        return barWidth + 2.0 + ((clamped - 24) / 42 * barWidth)
+    }
+
+    else {
+        return 2.0 * barWidth + 4.0 + ((clamped - 64) / 58 * barWidth)
     }
 }

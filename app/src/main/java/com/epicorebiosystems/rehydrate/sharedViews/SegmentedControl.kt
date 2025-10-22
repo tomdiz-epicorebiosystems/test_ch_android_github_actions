@@ -15,7 +15,10 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
@@ -75,7 +78,8 @@ fun SegmentedControl(
                             .offset((-1 * index).dp, 0.dp)
                             .zIndex(if (selectedIndex.value == index) 1f else 0f)
                     }
-                },
+                }
+                .testTag(if (selectedIndex.value == index) "segment_button_${item}_selected" else "segment_button_${item}_unselected"),
                 onClick = {
                     selectedIndex.value = index
                     onItemSelection(selectedIndex.value)
@@ -133,6 +137,7 @@ fun SegmentedControl(
                 },
             ) {
                 Text(
+                    modifier = Modifier.testTag("segmented_text_${item}"),
                     fontSize = fontSize,
                     text = item,
                     fontWeight = FontWeight.Normal,
