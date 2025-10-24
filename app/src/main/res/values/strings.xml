@@ -517,7 +517,7 @@ deficit will be replenished through your food intake.</string>
     <string name="enter_unlogged">Enter any unlogged intake for your shift.</string>
     <string name="data_syncd">In the app, check that all\ndata has synced.</string>
     <string name="long_press_power">Long-press power button. Module will flash orange and turn off.</string>
-    <string name="wash_armband">If washing the Armband,\nbe sure to detach module\nbe sure to detach module\nfor next use.</string>
+    <string name="wash_armband">If washing the Armband,\nbe sure to detach module\nfor next use.</string>
     <string name="grab_patch">Grab adhesive patch\nfrom top and peel.\nDisconnect module\nand discard patch.</string>
     <string name="module_notification">Module Notification Types</string>
     <string name="finish_drink">After you finish a drink, open the app and tap “Track Intake.” Select items from menu and save. This tracks the items’ sodium and water content.</string>

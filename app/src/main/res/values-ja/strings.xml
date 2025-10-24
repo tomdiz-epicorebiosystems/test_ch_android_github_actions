@@ -501,7 +501,7 @@
     <string name="enter_unlogged">シフトに記録されていない摂取量を入力してください。</string>
     <string name="data_syncd">アプリで、すべてのデータが同期されていることを確認します。</string>
     <string name="long_press_power">電源ボタンを長押しする。モジュールがオレンジ色に点滅し、電源が切れます。</string>
-    <string name="wash_armband">アームバンドを洗濯する場合は、必ず最初にモジュールを取り外し、次の使用のために脇に置いてください。</string>
+    <string name="wash_armband">アームバンドを洗う際は、\n次回使用のために必ずモジュールを外してください。</string>
     <string name="grab_patch">粘着パッチを上からつかみ、はがします。モジュールを取り外し、パッチを廃棄します。</string>
     <string name="module_notification">モジュール通知の種類</string>
     <string name="finish_drink">飲み終わったらアプリを開き、「摂取量を記録」をタップ。メニューから項目を選択し、保存する。これでアイテムのナトリウムと水分含有量が追跡される。</string>
